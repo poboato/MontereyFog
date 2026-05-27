@@ -105,8 +105,8 @@ body::before {
 }
 
 .hero-seal {
-  width: 88px;
-  height: 88px;
+  width: 150px;
+  height: 150px;
   margin: 0 auto 16px;
   display: block;
 }
