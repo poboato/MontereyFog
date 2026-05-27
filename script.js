@@ -49,7 +49,7 @@ var modals = {
       '• Days since you last saw the sun: 47<br>' +
       '• Times lost in Lot B: 12<br>' +
       '• Otter statue nose rubs this semester: 3<br>' +
-      '• Unread Title IX investigation emails: 847<br>' +
+
       '• Current mood: Damp</p>'
   },
   ottercam: {
@@ -101,15 +101,6 @@ var modals = {
     buttons: [
       { text: '🙏 I Feel Seen', class: 'modal-btn modal-btn-close', action: 'close' }
     ]
-  },
-  titleix: {
-    title: '⏳ Title IX Investigation Tracker',
-    body: '<p><strong>Your case: #847 in queue</strong></p>' +
-      '<div class="modal-progress"><div class="modal-progress-fill" style="width: 7%;"></div></div>' +
-      '<p>Current status: <strong>7% complete</strong></p>' +
-      '<p>Estimated completion: Q4 2028 (optimistic)<br>' +
-      'Actual completion: <em>TBD</em> (realistic)</p>' +
-      '<p style="font-size: 12px; color: #666;">"Your case is important to us. Please hold."</p>'
   },
   privacypolicy: {
     title: '📄 Privacy Policy (Parody Edition)',
@@ -290,22 +281,6 @@ var effects = {
         "🔏 We collect: your location (via fog), your parking frustration, your otter search history.",
         "⚖️ Privacy policy updated. Changes: we added more jokes. You're welcome.",
         "📋 Your data is safe with us. (We have no idea what to do with it.)"
-      ];
-      return { text: msgs[Math.floor(Math.random() * msgs.length)] };
-    }
-  },
-  titleix: {
-    emojis: ['⏳', '📋', '🕰️', '⏰', '📑', '🗂️'],
-    colors: ['#ffc107', '#e0a800', '#c69500', '#ffca2b'],
-    flash: 'rgba(255,193,7,0.08)',
-    makeToast: function() {
-      var pcts = ['3%', '7%', '2%', '4%', '1%'];
-      var pct = pcts[Math.floor(Math.random() * pcts.length)];
-      var msgs = [
-        "⏳ Your case: #847. Progress: ░░░░ " + pct + ". Estimated completion: Q4 2028.",
-        "📋 Investigation status: Your inquiry is important to us. Please hold. Forever.",
-        "🕰️ The Title IX office has received your report. They'll get to it. Eventually.",
-        "📑 Queue position: 847. There are 846 people ahead of you. They've all accepted this."
       ];
       return { text: msgs[Math.floor(Math.random() * msgs.length)] };
     }

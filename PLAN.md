@@ -53,7 +53,7 @@ csumb/
 ## 4. Content Inventory
 
 ### Home Tab
-- **News items:** Otter Statue, Service Learning, Title IX (2yr gap), Dive Program, Seaside Grads, Race-Related Stress Guide, Charlie Kirk controversy
+- **News items:** Otter Statue, Service Learning, Dive Program, Seaside Grads, Race-Related Stress Guide, Charlie Kirk controversy
 - **Sidebar:** Weather widget, Quick Facts, Otter Announcements, Quick Links, CTA button
 
 ### Academics Tab
