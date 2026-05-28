@@ -310,7 +310,63 @@ document.querySelectorAll('[data-effect]').forEach(function(el) {
   });
 });
 
+var rewards = {
+  5:   { title: '🐣 Novice Nose Rubber',      msg: 'You have rubbed the nose 5 times. The otter acknowledges your presence.' },
+  10:  { title: '🔟 Double Digits!',           msg: '10 nose rubs! The bronze otter is now slightly warm to the touch.' },
+  15:  { title: '💪 Dedicated',                msg: '15 rubs. Your dedication is noted. The otter\\\'s nose is now a family heirloom.' },
+  20:  { title: '🎯 Two Decades of Rubs',      msg: '20 nose rubs! You\\\'ve entered the Otter Appreciation Society.' },
+  25:  { title: '🏅 Quarter Century Club',     msg: '25 rubs! The otter has nominated you for a campus excellence award.' },
+  50:  { title: '🌟 Otter Whisperer',          msg: '50 NOSE RUBS! You can now communicate with otters. They say "rub my nose."' },
+  75:  { title: '👑 Platinum Otter',           msg: '75 rubs! The bronze otter has been polished to a mirror finish by YOUR hands.' },
+  100: { title: '⚜️ Otter Royalty',           msg: '100 NOSE RUBS! The otter has granted you a lifetime supply of fog. You\\\'re welcome.' }
+};
+
+function getReward(count) {
+  if (rewards[count]) return rewards[count];
+  if (count > 100 && count % 50 === 0) return { title: '🎉 ' + count + ' Rubs!', msg: 'You\\\'ve rubbed the nose ' + count + ' times. The otter is now a campus legend. So are you.' };
+  if (count > 25 && count % 25 === 0) return { title: '✨ ' + count + ' Rubs!', msg: 'The otter appreciates your ' + count + ' nose rubs. This is your life now.' };
+  return null;
+}
+
+function showReward(reward, count) {
+  var earned = JSON.parse(localStorage.getItem('montereyfog-badges') || '[]');
+  if (earned.indexOf(count) !== -1) return;
+  earned.push(count);
+  localStorage.setItem('montereyfog-badges', JSON.stringify(earned));
+  var container = document.getElementById('badgeContainer');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'badgeContainer';
+    container.className = 'badge-container';
+    document.body.appendChild(container);
+  }
+  var badge = document.createElement('div');
+  badge.className = 'reward-badge';
+  badge.innerHTML = '<span class="badge-title">' + reward.title + '</span><span class="badge-sub">' + count + ' Nose Rubs</span>';
+  container.appendChild(badge);
+  setTimeout(function() { badge.classList.add('badge-shake'); }, 200);
+}
+
+function restoreBadges() {
+  var earned = JSON.parse(localStorage.getItem('montereyfog-badges') || '[]');
+  if (earned.length === 0) return;
+  var container = document.createElement('div');
+  container.id = 'badgeContainer';
+  container.className = 'badge-container';
+  document.body.appendChild(container);
+  earned.forEach(function(count) {
+    var reward = getReward(count);
+    if (!reward) return;
+    var badge = document.createElement('div');
+    badge.className = 'reward-badge';
+    badge.innerHTML = '<span class="badge-title">' + reward.title + '</span><span class="badge-sub">' + count + ' Nose Rubs</span>';
+    container.appendChild(badge);
+  });
+}
+restoreBadges();
+
 function triggerEffect(fx) {
+  var isReward = false;
   if (fx.counter) {
     rubCount++;
     document.getElementById('rubCount').textContent = rubCount;
@@ -318,13 +374,19 @@ function triggerEffect(fx) {
     cnt.classList.remove('bump');
     void cnt.offsetWidth;
     cnt.classList.add('bump');
+    var reward = getReward(rubCount);
+    if (reward) {
+      isReward = true;
+      showReward(reward, rubCount);
+    }
   }
 
+  var flashColor = isReward ? 'rgba(201,168,76,0.3)' : fx.flash;
   var flash = document.createElement('div');
   flash.className = 'rub-flash';
-  flash.style.background = 'radial-gradient(circle at center, ' + fx.flash + ' 0%, transparent 70%)';
+  flash.style.background = 'radial-gradient(circle at center, ' + flashColor + ' 0%, transparent 70%)';
   document.body.appendChild(flash);
-  setTimeout(function() { flash.remove(); }, 800);
+  setTimeout(function() { flash.remove(); }, isReward ? 1200 : 800);
 
   var toastData = fx.makeToast();
   var toast = document.createElement('div');
@@ -337,16 +399,21 @@ function triggerEffect(fx) {
   document.body.appendChild(toast);
   setTimeout(function() { toast.remove(); }, 3000);
 
-  for (var i = 0; i < 30; i++) {
+  var particleCount = isReward ? 600 : 30;
+  for (var i = 0; i < particleCount; i++) {
     (function() {
       var p = document.createElement('div');
 
+      var rewardEmojis = ['🎉', '🎊', '🏆', '👑', '💎', '🌟', '✨', '🎯'];
+      var emojis = isReward ? rewardEmojis : fx.emojis;
       if (Math.random() > 0.5) {
         p.className = 'rub-particle emoji';
-        p.textContent = fx.emojis[Math.floor(Math.random() * fx.emojis.length)];
+        p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
       } else {
         p.className = 'rub-particle';
-        p.style.background = fx.colors[Math.floor(Math.random() * fx.colors.length)];
+        var rewardColors = ['#c9a84c', '#dbbf5e', '#e8d48b', '#ffffff', '#ffd700', '#ffecb3'];
+        var colors = isReward ? rewardColors : fx.colors;
+        p.style.background = colors[Math.floor(Math.random() * colors.length)];
         var size = 6 + Math.random() * 12;
         p.style.width = size + 'px';
         p.style.height = size + 'px';
