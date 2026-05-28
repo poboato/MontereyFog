@@ -367,3 +367,124 @@ function triggerEffect(fx) {
     })();
   }
 }
+
+/* ── Dark Mode ── */
+
+(function() {
+  var toggle = document.getElementById('darkToggle');
+  var stored = localStorage.getItem('montereyfog-dark');
+  if (stored === 'true') {
+    document.body.classList.add('dark-mode');
+    toggle.textContent = '☀️';
+  }
+  toggle.addEventListener('click', function() {
+    document.body.classList.toggle('dark-mode');
+    var isDark = document.body.classList.contains('dark-mode');
+    toggle.textContent = isDark ? '☀️' : '🌙';
+    localStorage.setItem('montereyfog-dark', isDark);
+  });
+})();
+
+/* ── Search ── */
+
+(function() {
+  var input = document.getElementById('siteSearch');
+  var btn = document.getElementById('searchBtn');
+  function doSearch() {
+    var q = input.value.trim().toLowerCase();
+    var activePanel = document.querySelector('.tab-panel.active');
+    if (!activePanel) return;
+    var items = activePanel.querySelectorAll('.news-item, .testimonial, .fun-fact, .love-letter, .shoutout, .pro-con');
+    if (!q) {
+      items.forEach(function(el) { el.classList.remove('search-hidden'); });
+      activePanel.querySelectorAll('.search-highlight').forEach(function(el) {
+        var parent = el.parentNode;
+        parent.replaceChild(document.createTextNode(el.textContent), el);
+        parent.normalize();
+      });
+      return;
+    }
+    items.forEach(function(el) {
+      var text = el.textContent.toLowerCase();
+      var match = text.indexOf(q) !== -1;
+      el.classList.toggle('search-hidden', !match);
+    });
+    if (activePanel.querySelector('.search-hidden')) {
+      var visible = activePanel.querySelectorAll('.news-item:not(.search-hidden), .testimonial:not(.search-hidden), .fun-fact:not(.search-hidden), .love-letter:not(.search-hidden), .shoutout:not(.search-hidden), .pro-con:not(.search-hidden)');
+      if (visible.length === 0) {
+        var msg = activePanel.querySelector('.no-search-results');
+        if (!msg) {
+          msg = document.createElement('p');
+          msg.className = 'no-search-results';
+          msg.style.cssText = 'text-align: center; padding: 24px; color: var(--text-muted); font-style: italic;';
+          msg.textContent = '🔍 No results found in the fog. Try a different search.';
+          activePanel.appendChild(msg);
+        }
+      } else {
+        var oldMsg = activePanel.querySelector('.no-search-results');
+        if (oldMsg) oldMsg.remove();
+      }
+    } else {
+      var oldMsg = activePanel.querySelector('.no-search-results');
+      if (oldMsg) oldMsg.remove();
+    }
+  }
+  input.addEventListener('input', doSearch);
+  btn.addEventListener('click', doSearch);
+})();
+
+/* ── Visitor Counter ── */
+
+(function() {
+  var el = document.getElementById('visitorCount');
+  var count = localStorage.getItem('montereyfog-visits');
+  if (!count) {
+    count = 1;
+  } else {
+    count = parseInt(count, 10) + 1;
+  }
+  localStorage.setItem('montereyfog-visits', count);
+  el.textContent = '🦦 Visitor #' + count;
+})();
+
+/* ── Weather Refresh ── */
+
+(function() {
+  var conditions = [
+    { cond: 'DENSE FOG ADVISORY', temp: '57°F / 14°C', extra: 'Visibility: 2 otters<br>UV Index: "What\'s UV?"<br>Humidity: All of it' },
+    { cond: 'PATCHY FOG', temp: '58°F / 14°C', extra: 'Visibility: 3 otters<br>UV Index: "Maybe?"<br>Humidity: Damp' },
+    { cond: 'FOGGY WITH A CHANCE OF FOG', temp: '56°F / 13°C', extra: 'Visibility: 1.5 otters<br>UV Index: Theoretical<br>Humidity: Yes' },
+    { cond: 'MARINE LAYER INTENSIFIES', temp: '55°F / 13°C', extra: 'Visibility: An otter-length<br>UV Index: Not today<br>Humidity: 100% of vibes' },
+    { cond: 'FOG SO THICK YOU CAN TASTE IT', temp: '54°F / 12°C', extra: 'Visibility: 0.5 otters<br>UV Index: Gone<br>Humidity: Physical' }
+  ];
+  document.querySelectorAll('.weather-refresh').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      var widget = this.parentElement;
+      var idx = Math.floor(Math.random() * conditions.length);
+      var c = conditions[idx];
+      widget.querySelector('.cond').textContent = c.cond;
+      widget.querySelector('.temp').textContent = c.temp;
+      var extraDiv = widget.querySelector('div[style*="margin-top: 6px"]') || widget.querySelector('div[style*="font-size: 11px"]');
+      if (extraDiv) {
+        extraDiv.innerHTML = c.extra + '<br>Forecast: More fog';
+      }
+    });
+  });
+})();
+
+/* ── Scroll to Top ── */
+
+(function() {
+  var btn = document.getElementById('scrollTop');
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 400) {
+      btn.classList.add('show');
+    } else {
+      btn.classList.remove('show');
+    }
+  });
+  btn.addEventListener('click', function() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+})();

@@ -11,36 +11,44 @@
 </head>
 <body>
 
-<div class="fog-overlay"></div>
-
-<div class="top-bar">
-  <span>☁️ CSU Monterey Fog — We're literally one mile from the beach (you just can't see it)</span>
-  <span>
-    <a href="#" data-effect="myfog">myFog</a>
-    <a href="#" data-effect="ottercam">Otter Cam</a>
-    <a href="#" data-effect="rubnose">Rub the Statue's Nose</a>
-  </span>
+<div class="header">
+  <div class="header-inner">
+    <div class="header-logo">
+      <svg class="header-seal" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="46" fill="none" stroke="#c9a84c" stroke-width="1.5"/>
+        <circle cx="50" cy="50" r="42" fill="none" stroke="#c9a84c" stroke-width="0.5" opacity="0.5"/>
+        <text x="50" y="24" text-anchor="middle" fill="#c9a84c" font-size="7" font-family="'DM Serif Display', Georgia, serif" letter-spacing="1.5">CSU MONTEREY FOG</text>
+        <text x="50" y="31" text-anchor="middle" fill="#c9a84c" font-size="4" font-family="'Inter', sans-serif" letter-spacing="2" opacity="0.7">EST. 1994</text>
+        <line x1="20" y1="36" x2="80" y2="36" stroke="#c9a84c" stroke-width="0.4" opacity="0.4"/>
+        <text x="50" y="54" text-anchor="middle" font-size="18" fill="white">🦦</text>
+        <text x="50" y="70" text-anchor="middle" fill="#c9a84c" font-size="5" font-family="'Inter', sans-serif" letter-spacing="2">WE RAFT UP</text>
+        <line x1="20" y1="76" x2="80" y2="76" stroke="#c9a84c" stroke-width="0.4" opacity="0.4"/>
+        <text x="50" y="87" text-anchor="middle" fill="white" font-size="3.5" font-family="'Inter', sans-serif" opacity="0.4">FOR ORD · SEASIDE · CA</text>
+      </svg>
+      <div class="header-title">
+        <span class="header-name">California State University, Monterey Fog</span>
+        <span class="header-tagline">We're literally one mile from the beach (you just can't see it)</span>
+      </div>
+    </div>
+    <div class="header-actions">
+      <a href="#" data-effect="myfog" class="portal-btn">myFog</a>
+      <a href="#" data-effect="ottercam">Otter Cam</a>
+      <a href="#" data-effect="rubnose">Rub the Statue's Nose</a>
+      <button class="dark-toggle" id="darkToggle" aria-label="Toggle dark mode">🌙</button>
+    </div>
+  </div>
 </div>
 
 <div class="hero">
   <div class="hero-bg"></div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
-    <svg class="hero-seal" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="50" cy="50" r="46" fill="none" stroke="#c9a84c" stroke-width="1.5"/>
-      <circle cx="50" cy="50" r="42" fill="none" stroke="#c9a84c" stroke-width="0.5" opacity="0.5"/>
-      <text x="50" y="24" text-anchor="middle" fill="#c9a84c" font-size="7" font-family="'DM Serif Display', Georgia, serif" letter-spacing="1.5">CSU MONTEREY FOG</text>
-      <text x="50" y="31" text-anchor="middle" fill="#c9a84c" font-size="4" font-family="'Inter', sans-serif" letter-spacing="2" opacity="0.7">EST. 1994</text>
-      <line x1="20" y1="36" x2="80" y2="36" stroke="#c9a84c" stroke-width="0.4" opacity="0.4"/>
-      <text x="50" y="54" text-anchor="middle" font-size="18" fill="white">🦦</text>
-      <text x="50" y="70" text-anchor="middle" fill="#c9a84c" font-size="5" font-family="'Inter', sans-serif" letter-spacing="2">WE RAFT UP</text>
-      <line x1="20" y1="76" x2="80" y2="76" stroke="#c9a84c" stroke-width="0.4" opacity="0.4"/>
-      <text x="50" y="87" text-anchor="middle" fill="white" font-size="3.5" font-family="'Inter', sans-serif" opacity="0.4">FOR ORD · SEASIDE · CA</text>
-    </svg>
-    <div class="hero-accent"></div>
     <h1>California State University, <span>Monterey Fog</span></h1>
     <div class="subtitle">"You'll never see it coming. Literally. It's the fog."</div>
-    <div class="subtitle" style="font-size: 0.8rem; opacity: 0.65;">Built on a former Army base. The Army left for a reason.</div>
+    <div class="hero-search">
+      <input type="text" id="siteSearch" placeholder="Search news, programs, inside jokes..." autocomplete="off">
+      <button class="search-btn" id="searchBtn">Search</button>
+    </div>
     <a href="#" class="hero-cta">Raft Up — Apply Now</a>
   </div>
 </div>
@@ -400,6 +408,7 @@
             UV Index: "What's UV?"<br>
             Forecast: Fog, with a chance of fog breaking into fog
           </div>
+          <button class="weather-refresh" data-weather="sidebar">↻ Refresh</button>
         </div>
       </div>
 
@@ -585,6 +594,7 @@
             Humidity: All of it<br>
             Forecast: Fog tonight, fog tomorrow, fog eternal
           </div>
+          <button class="weather-refresh" data-weather="fog">↻ Refresh</button>
         </div>
       </div>
 
@@ -657,6 +667,7 @@
   </div>
   <div class="footer-bottom">
     &copy; 2026 CSU Monterey Fog &mdash; Accredited by WASC. Barely.
+    <span class="visitor-count" id="visitorCount"></span>
   </div>
 </div>
 <div class="otter-counter" id="otterCounter">🦦 Nose Rubs: <span id="rubCount">0</span></div>
@@ -671,6 +682,7 @@
   </div>
 </div>
 
+<button class="scroll-top" id="scrollTop" aria-label="Scroll to top">↑</button>
 <script src="script.js"></script>
 </body>
 </html>
