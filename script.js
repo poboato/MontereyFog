@@ -22,6 +22,7 @@ document.querySelectorAll('.nav a[data-tab]').forEach(function(link) {
     if (panel) panel.classList.add('active');
     if (sidebar) sidebar.classList.add('active');
 
+    document.dispatchEvent(new CustomEvent('tabchange'));
     document.querySelector('.container').scrollIntoView({ behavior: 'smooth', block: 'start' });
 
     var nav = document.getElementById('mainNav');
@@ -49,7 +50,6 @@ var modals = {
       '• Days since you last saw the sun: 47<br>' +
       '• Times lost in Lot B: 12<br>' +
       '• Otter statue nose rubs this semester: 3<br>' +
-
       '• Current mood: Damp</p>'
   },
   ottercam: {
@@ -485,10 +485,8 @@ function triggerEffect(fx) {
   }
   if (input) input.addEventListener('input', doSearch);
   if (btn) btn.addEventListener('click', function(e) { e.preventDefault(); doSearch(); });
-  document.querySelectorAll('.nav a[data-tab]').forEach(function(link) {
-    link.addEventListener('click', function() {
-      setTimeout(doSearch, 50);
-    });
+  document.addEventListener('tabchange', function() {
+    setTimeout(doSearch, 50);
   });
 })();
 
@@ -565,7 +563,7 @@ function triggerEffect(fx) {
     if (!widget) return;
     var condEl = widget.querySelector('.cond');
     var tempEl = widget.querySelector('.temp');
-    var extraEl = widget.querySelector('div[style*="margin-top: 6px"]') || widget.querySelector('div[style*="font-size: 11px"]') || widget.querySelector('div[style*="font-size: 12px"]');
+    var extraEl = widget.querySelector('.weather-extras');
     if (condEl) condEl.textContent = data.cond;
     if (tempEl) tempEl.textContent = data.temp;
     if (extraEl) extraEl.innerHTML = data.extra + '<br>Forecast: More fog';

@@ -4,8 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CSU Monterey Fog — Est. 1994. Still figuring it out.</title>
+  <meta name="description" content="CSU Monterey Fog is an affectionate parody of California State University, Monterey Bay. News, satire, and otter-based humor from the foggiest campus in California.">
+  <meta property="og:title" content="CSU Monterey Fog">
+  <meta property="og:description" content="The only university where you can't see your future because of the marine layer.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://montereyfog.edu">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦦</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://images.unsplash.com">
+  <link rel="dns-prefetch" href="https://api.open-meteo.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -63,7 +72,7 @@
     <div class="hero-right">
       <h1>California State University, <span>Monterey Fog</span></h1>
       <div class="subtitle">"You'll never see it coming. Literally. It's the fog."</div>
-      <a href="#" class="hero-cta">Raft Up — Apply Now</a>
+      <a href="apply.html" class="hero-cta">Raft Up — Apply Now</a>
     </div>
   </div>
 </div>
@@ -124,7 +133,7 @@
         <span>💀</span>
         <div class="pos-bar"><div class="pos-fill"></div></div>
         <span>😊</span>
-        <span style="font-size: 11px; color: #666;">Campus Vibes: Mostly wholesome, occasionally on fire</span>
+        <span class="vibe-label">Campus Vibes: Mostly wholesome, occasionally on fire</span>
       </div>
 
       <div class="coastal-img">
@@ -205,7 +214,7 @@
       <div class="love-letter">
         <h4>💌 An Actual Nice Thing Someone Said</h4>
         <p>"When visiting my hometown as I would leave to go back to campus I would always say 'time to go home.' From my first college experience at Monterey I could honestly call it my forever home. It will always have a place in my heart — from the giant sand dunes overlooking the ocean from the highway, or the animals on campus that also call it home."</p>
-        <p style="text-align: right; font-size: 11px; margin-top: 6px;">&mdash; Actual student review, Niche.com</p>
+        <p class="love-letter-attribution">&mdash; Actual student review, Niche.com</p>
       </div>
 
       <div class="fun-fact">
@@ -315,7 +324,7 @@
         <p>A leaked photo of the Eatery's whiteboard specials has gone viral among students. Items include: "Creamy Chicken Thing," "Beef Situation," "Pasta Mood," "Soup (Color Varies)," "Vegetable Adjacent Stir-Fry," and the ever-popular "Protein of Unknown Origin." Chef Marcus insists the descriptions are "deliberately casual to reduce student anxiety." Students counter that the descriptions increase a different kind of anxiety. "I ate the Beef Situation three days in a row," says senior Taylor K. "Each day it was a different meat. I've made peace with the ambiguity. It's part of the CSUMB experience now."</p>
       </div>
 
-      <div class="pro-con" style="margin-top: 16px;">
+      <div class="pro-con pro-con--spaced">
         <div class="pro">Ramen bar exists</div>
         <div class="con">It's open 11am-2pm, you have class</div>
         <div class="pro">Verve Coffee in the library</div>
@@ -365,10 +374,10 @@
         <div class="author">&mdash; Riley T., has forgotten what shadows look like</div>
       </div>
 
-      <div class="weather-widget" style="margin: 14px 0;">
+      <div class="weather-widget weather-inline">
         <div class="cond">DENSE FOG ADVISORY</div>
         <div class="temp">57°F / 14°C</div>
-        <div style="margin-top: 6px; font-size: 12px;">
+        <div class="weather-extras">
           Visibility: 2 otters<br>
           UV Index: "What's UV?"<br>
           Humidity: All of it<br>
@@ -418,7 +427,7 @@
         <div class="weather-widget">
           <div class="cond">Dense Fog Advisory (Day 3,418)</div>
           <div class="temp">57°F / 14°C</div>
-          <div style="margin-top: 6px; font-size: 11px;">
+          <div class="weather-extras weather-extras--tight">
             Visibility: 2 otters<br>
             UV Index: "What's UV?"<br>
             Forecast: Fog, with a chance of fog breaking into fog
@@ -431,7 +440,7 @@
         <h3>📋 Quick Facts</h3>
         <ul>
           <li><strong>Founded:</strong> 1994 (fog filed for residency same year)</li>
-          <li><strong>Mascot:</strong> Monte Rey <span style="font-size: 10px;">(nose: rubbed daily)</span></li>
+          <li><strong>Mascot:</strong> Monte Rey <span class="mascot-annotation">(nose: rubbed daily)</span></li>
           <li><strong>Colors:</strong> Green, Gold &amp; Fog Grey</li>
           <li><strong>Former life:</strong> Fort Ord (we kept the vibes)</li>
           <li><strong>Dive program:</strong> Largest in the US, nbd</li>
@@ -454,20 +463,20 @@
       <div class="card">
         <h3>🔗 Quick Links</h3>
         <ul>
-          <li><a href="#" data-modal="ottercam" style="color: #31456b;">Otter Cam (live feed, mostly fog)</a></li>
-          <li><a href="#" data-effect="rubnose" style="color: #31456b;">Rub the Statue (webcam)</a></li>
-          <li><a href="#" data-modal="diningmenu" style="color: #31456b;">Dining Hall Menu (8 concepts!)</a></li>
-          <li><a href="#" data-modal="parkinggrief" style="color: #31456b;">Parking Grief Support Group</a></li>
+          <li><a href="#" data-modal="ottercam" class="sidebar-link">Otter Cam (live feed, mostly fog)</a></li>
+          <li><a href="#" data-effect="rubnose" class="sidebar-link">Rub the Statue (webcam)</a></li>
+          <li><a href="#" data-modal="diningmenu" class="sidebar-link">Dining Hall Menu (8 concepts!)</a></li>
+          <li><a href="#" data-modal="parkinggrief" class="sidebar-link">Parking Grief Support Group</a></li>
         </ul>
       </div>
 
-      <a href="#" class="cta-button">🦦 RAFT UP — APPLY NOW</a>
+      <a href="apply.html" class="cta-button">🦦 RAFT UP — APPLY NOW</a>
 
       <div class="shoutout">
         <strong>💙 Real Talk:</strong> CSUMB is a genuinely good school with incredible faculty, a stunning location, and a community that actually cares. We roast it because we love it. If you're considering applying, do it. Just bring a jacket. And a parking budget.
       </div>
 
-      <div style="text-align: center; margin-top: 6px; font-size: 10px; color: #888;">
+      <div class="parody-notice">
         This is a parody website. The real CSUMB is at csumb.edu.<br>
         We are not responsible for any decisions made after rubbing a bronze otter's nose.<br>
         *No otters were harmed. The statue's feelings are another matter.
@@ -482,6 +491,7 @@
           <li>1. Fog Studies (B.A., B.S., B.arely Visible)</li>
           <li>2. Marine Science (wet version of Fog Studies)</li>
           <li>3. Scientific Diving (see also: hypothermia)</li>
+          <li>4. Bronze Otter Nose Polishing (hands-on track)</li>
           <li>5. Parking Lot Archaeology (field work intensive)</li>
           <li>6. Service Learning (it's required, don't check the box)</li>
           <li>7. Clam Chowder Arts (culinary track)</li>
@@ -591,7 +601,7 @@
         </ul>
       </div>
 
-      <div class="fun-fact" style="margin: 0;">
+      <div class="fun-fact fun-fact--flush">
         💀 <strong>Final meal:</strong> A student once tried to eat at all 8 concepts in one sitting. He made it to 5 before they closed the Eatery at 8pm. His final words were "tell Flame I'll be back." He was not back. Flame moved on.
       </div>
     </div>
@@ -603,7 +613,7 @@
         <div class="weather-widget">
           <div class="cond">DENSE FOG ADVISORY</div>
           <div class="temp">57°F / 14°C</div>
-          <div style="margin-top: 6px; font-size: 11px;">
+          <div class="weather-extras weather-extras--tight">
             Visibility: 2 otters<br>
             UV Index: "What's UV?"<br>
             Humidity: All of it<br>
@@ -624,7 +634,7 @@
         </ul>
       </div>
 
-      <div class="fun-fact" style="margin: 0;">
+      <div class="fun-fact fun-fact--flush">
         🌫️ <strong>Fun fact:</strong> The fog is technically a "marine layer" caused by the cold California Current meeting warm inland air. But "fog" is more fun to say. FOG. See?
       </div>
     </div>

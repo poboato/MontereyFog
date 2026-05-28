@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Raft Up — Apply to CSU Monterey Fog</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .apply-page { max-width: 720px; margin: 40px auto; padding: 0 20px; }
+    .apply-card { background: var(--card-bg); border-radius: 12px; padding: 36px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid var(--card-border); }
+    .apply-card h1 { font-size: 2rem; color: var(--text); border-bottom: 2px solid #c9a84c; padding-bottom: 12px; margin-bottom: 20px; }
+    .apply-card p { font-size: 14px; color: var(--text-secondary); margin-bottom: 16px; }
+    .form-group { margin-bottom: 18px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--border-strong); border-radius: 6px; font-size: 14px; font-family: 'Inter', sans-serif; background: var(--bg-secondary); color: var(--text); transition: border-color 0.2s; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #c9a84c; }
+    .form-group textarea { resize: vertical; min-height: 80px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-checkbox { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: var(--text-secondary); }
+    .form-checkbox input { width: auto; margin-top: 3px; }
+    .apply-submit { background: linear-gradient(135deg, #689466, #4f7a4e); color: white; border: none; padding: 14px 32px; border-radius: 8px; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.25s ease; box-shadow: 0 4px 16px rgba(104,148,102,0.3); font-family: 'Inter', sans-serif; width: 100%; }
+    .apply-submit:hover { background: linear-gradient(135deg, #7aaa78, #5a8d58); transform: translateY(-2px); }
+    .apply-disclaimer { text-align: center; font-size: 11px; color: var(--text-muted); margin-top: 16px; }
+    .back-link { display: inline-block; margin-bottom: 20px; font-size: 13px; color: var(--text-muted); text-decoration: none; }
+    .back-link:hover { color: #c9a84c; }
+    @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } .apply-card { padding: 20px; } }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="header-logo">
+      <svg class="header-seal" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="50" cy="50" r="46" fill="none" stroke="#c9a84c" stroke-width="1.5"/>
+        <circle cx="50" cy="50" r="42" fill="none" stroke="#c9a84c" stroke-width="0.5" opacity="0.5"/>
+        <text x="50" y="24" text-anchor="middle" fill="#c9a84c" font-size="7" font-family="'DM Serif Display', Georgia, serif" letter-spacing="1.5">CSU MONTEREY FOG</text>
+        <text x="50" y="31" text-anchor="middle" fill="#c9a84c" font-size="4" font-family="'Inter', sans-serif" letter-spacing="2" opacity="0.7">EST. 1994</text>
+        <line x1="20" y1="36" x2="80" y2="36" stroke="#c9a84c" stroke-width="0.4" opacity="0.4"/>
+        <text x="50" y="54" text-anchor="middle" font-size="18" fill="white">🦦</text>
+        <text x="50" y="70" text-anchor="middle" fill="#c9a84c" font-size="5" font-family="'Inter', sans-serif" letter-spacing="2">WE RAFT UP</text>
+        <line x1="20" y1="76" x2="80" y2="76" stroke="#c9a84c" stroke-width="0.4" opacity="0.4"/>
+        <text x="50" y="87" text-anchor="middle" fill="white" font-size="3.5" font-family="'Inter', sans-serif" opacity="0.4">FOR ORD · SEASIDE · CA</text>
+      </svg>
+      <div class="header-title">
+        <span class="header-name">California State University, Monterey Fog</span>
+        <span class="header-tagline">We're literally one mile from the beach (you just can't see it)</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="apply-page">
+  <a href="index.html" class="back-link">← Back to campus</a>
+  <div class="apply-card">
+    <h1>🦦 Raft Up — Apply Now</h1>
+
+    <p><strong>Congratulations!</strong> You've taken the first step toward joining the foggiest, otter-est, most architecturally confusing university in California. Fill out the form below and we'll get back to you in approximately 2–4 business years (the fog slows down our mailroom).</p>
+
+    <form id="applyForm" onsubmit="handleSubmit(event)">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="firstName">First Name</label>
+          <input type="text" id="firstName" required placeholder="e.g. Foggy">
+        </div>
+        <div class="form-group">
+          <label for="lastName">Last Name</label>
+          <input type="text" id="lastName" required placeholder="e.g. McOtterface">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" required placeholder="you@example.com (we will spam you with otter facts)">
+      </div>
+
+      <div class="form-group">
+        <label for="major">Intended Major</label>
+        <select id="major">
+          <option value="">Select one...</option>
+          <option>Fog Studies (B.A., B.S., B.arely Visible)</option>
+          <option>Marine Science (wet version of Fog Studies)</option>
+          <option>Scientific Diving (see also: hypothermia)</option>
+          <option>Bronze Otter Nose Polishing (hands-on track)</option>
+          <option>Parking Lot Archaeology (field work intensive)</option>
+          <option>Service Learning (it's required)</option>
+          <option>Clam Chowder Arts (culinary track)</option>
+          <option>Otter Communication Studies</option>
+          <option>Navigating by Fog (survival skills credit)</option>
+          <option>Undecided (we'll put you in Lot B)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="essay">Personal Statement (max 3 words)</label>
+        <textarea id="essay" placeholder="e.g. I like otters"></textarea>
+      </div>
+
+      <div class="form-group form-checkbox">
+        <input type="checkbox" id="fogwaiver" required>
+        <label for="fogwaiver">I acknowledge that I will not see the sun for extended periods and that my parking permit will cost more than my textbooks.</label>
+      </div>
+
+      <div class="form-group form-checkbox">
+        <input type="checkbox" id="noseRub" required>
+        <label for="noseRub">I solemnly swear to rub the bronze otter's nose before every exam.</label>
+      </div>
+
+      <div class="form-group form-checkbox">
+        <input type="checkbox" id="ghostKitchen">
+        <label for="ghostKitchen">I accept the "Creamy Chicken Thing" as a valid food group.</label>
+      </div>
+
+      <button type="submit" class="apply-submit">🦦 RAFT UP — SUBMIT APPLICATION</button>
+    </form>
+
+    <p class="apply-disclaimer">By submitting, you agree to be added to our "Otter Facts" newsletter. You also agree that the dining hall closing at 8pm is "character building." This is a parody application. The real CSUMB application is at csumb.edu/apply.</p>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="footer-inner">
+    <div class="footer-col">
+      <h4>🦦 CSU Monterey Fog</h4>
+      <p>100 Campus Center, Seaside, CA 93955 (probably)</p>
+      <p>Phone: (831) FOG-OTTER</p>
+    </div>
+    <div class="footer-col">
+      <h4>Quick Links</h4>
+      <a href="index.html">Home</a>
+      <a href="index.html#">Otter Cam</a>
+      <a href="index.html#">Rub the Nose</a>
+    </div>
+    <div class="footer-col">
+      <h4>Legal-ish</h4>
+      <a href="index.html">Back to Campus</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    &copy; 2026 CSU Monterey Fog &mdash; Accredited by WASC. Barely.
+  </div>
+</div>
+
+<script>
+function handleSubmit(e) {
+  e.preventDefault();
+  var overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(10,18,30,0.7);z-index:99999;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);';
+  var modal = document.createElement('div');
+  modal.style.cssText = 'background:white;border-radius:12px;max-width:420px;width:90%;padding:28px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);font-family:Inter,sans-serif;';
+  modal.innerHTML = '<div style="font-size:48px;margin-bottom:12px;">🦦</div><h2 style="font-family:\'DM Serif Display\',serif;font-weight:400;color:#2c3e50;margin-bottom:8px;">Application Submitted!</h2><p style="color:#666;font-size:14px;line-height:1.6;">Your application has been received. Queue position: <strong>8,201</strong>. Estimated processing time: <strong>2–4 business years</strong>. In the meantime, we recommend practicing your fog navigation skills and preparing your nose for the otter statue.</p><p style="color:#999;font-size:12px;margin-top:12px;">🦦 Raft up. We\'ll be in touch. Eventually.</p><button onclick="this.closest(\'[style*=\\"position:fixed\\"]\').remove()" style="margin-top:16px;background:#1a2640;color:white;border:none;padding:10px 28px;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;font-family:Inter,sans-serif;">OK</button>';
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+}
+</script>
+
+</body>
+</html>
