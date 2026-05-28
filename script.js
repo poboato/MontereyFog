@@ -394,43 +394,35 @@ function triggerEffect(fx) {
     var q = input.value.trim().toLowerCase();
     var activePanel = document.querySelector('.tab-panel.active');
     if (!activePanel) return;
-    var items = activePanel.querySelectorAll('.news-item, .testimonial, .fun-fact, .love-letter, .shoutout, .pro-con');
-    if (!q) {
-      items.forEach(function(el) { el.classList.remove('search-hidden'); });
-      activePanel.querySelectorAll('.search-highlight').forEach(function(el) {
-        var parent = el.parentNode;
-        parent.replaceChild(document.createTextNode(el.textContent), el);
-        parent.normalize();
-      });
-      return;
-    }
+    var items = activePanel.querySelectorAll('.news-item, .testimonial, .fun-fact, .love-letter, .shoutout, .pro-con, .card, .disclaimer');
+    items.forEach(function(el) { el.classList.remove('search-hidden'); });
+    var noResults = activePanel.querySelector('.no-search-results');
+    if (noResults) noResults.remove();
+    if (!q) return;
+    var anyVisible = false;
     items.forEach(function(el) {
       var text = el.textContent.toLowerCase();
-      var match = text.indexOf(q) !== -1;
-      el.classList.toggle('search-hidden', !match);
-    });
-    if (activePanel.querySelector('.search-hidden')) {
-      var visible = activePanel.querySelectorAll('.news-item:not(.search-hidden), .testimonial:not(.search-hidden), .fun-fact:not(.search-hidden), .love-letter:not(.search-hidden), .shoutout:not(.search-hidden), .pro-con:not(.search-hidden)');
-      if (visible.length === 0) {
-        var msg = activePanel.querySelector('.no-search-results');
-        if (!msg) {
-          msg = document.createElement('p');
-          msg.className = 'no-search-results';
-          msg.style.cssText = 'text-align: center; padding: 24px; color: var(--text-muted); font-style: italic;';
-          msg.textContent = '🔍 No results found in the fog. Try a different search.';
-          activePanel.appendChild(msg);
-        }
+      if (text.indexOf(q) === -1) {
+        el.classList.add('search-hidden');
       } else {
-        var oldMsg = activePanel.querySelector('.no-search-results');
-        if (oldMsg) oldMsg.remove();
+        anyVisible = true;
       }
-    } else {
-      var oldMsg = activePanel.querySelector('.no-search-results');
-      if (oldMsg) oldMsg.remove();
+    });
+    if (!anyVisible) {
+      var msg = document.createElement('p');
+      msg.className = 'no-search-results';
+      msg.style.cssText = 'text-align: center; padding: 24px; color: #888; font-style: italic;';
+      msg.textContent = '🔍 No results found in the fog. Try a different search.';
+      activePanel.appendChild(msg);
     }
   }
-  input.addEventListener('input', doSearch);
-  btn.addEventListener('click', doSearch);
+  if (input) input.addEventListener('input', doSearch);
+  if (btn) btn.addEventListener('click', function(e) { e.preventDefault(); doSearch(); });
+  document.querySelectorAll('.nav a[data-tab]').forEach(function(link) {
+    link.addEventListener('click', function() {
+      setTimeout(doSearch, 50);
+    });
+  });
 })();
 
 /* ── Visitor Counter ── */
