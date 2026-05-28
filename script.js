@@ -386,7 +386,7 @@ function triggerEffect(fx) {
   flash.className = 'rub-flash';
   flash.style.background = 'radial-gradient(circle at center, ' + flashColor + ' 0%, transparent 70%)';
   document.body.appendChild(flash);
-  setTimeout(function() { flash.remove(); }, isReward ? 1200 : 800);
+  setTimeout(function() { flash.remove(); }, isReward ? 500 : 400);
 
   var toastData = fx.makeToast();
   var toast = document.createElement('div');
@@ -430,7 +430,7 @@ function triggerEffect(fx) {
       p.style.setProperty('--dy', Math.sin(angle) * dist + 'px');
 
       document.body.appendChild(p);
-      setTimeout(function() { p.remove(); }, 1400);
+      setTimeout(function() { p.remove(); }, 800);
     })();
   }
 }
@@ -506,28 +506,105 @@ function triggerEffect(fx) {
   el.textContent = '🦦 Visitor #' + count;
 })();
 
-/* ── Weather Refresh ── */
+/* ── Live Weather ── */
 
 (function() {
-  var conditions = [
-    { cond: 'DENSE FOG ADVISORY', temp: '57°F / 14°C', extra: 'Visibility: 2 otters<br>UV Index: "What\'s UV?"<br>Humidity: All of it' },
-    { cond: 'PATCHY FOG', temp: '58°F / 14°C', extra: 'Visibility: 3 otters<br>UV Index: "Maybe?"<br>Humidity: Damp' },
-    { cond: 'FOGGY WITH A CHANCE OF FOG', temp: '56°F / 13°C', extra: 'Visibility: 1.5 otters<br>UV Index: Theoretical<br>Humidity: Yes' },
-    { cond: 'MARINE LAYER INTENSIFIES', temp: '55°F / 13°C', extra: 'Visibility: An otter-length<br>UV Index: Not today<br>Humidity: 100% of vibes' },
-    { cond: 'FOG SO THICK YOU CAN TASTE IT', temp: '54°F / 12°C', extra: 'Visibility: 0.5 otters<br>UV Index: Gone<br>Humidity: Physical' }
-  ];
+  var MONTEREY_LAT = 36.6002;
+  var MONTEREY_LON = -121.8947;
+  var WEATHER_API = 'https://api.open-meteo.com/v1/forecast?latitude=' + MONTEREY_LAT + '&longitude=' + MONTEREY_LON + '&current=temperature_2m,relative_humidity_2m,weather_code,wind_speed_10m,uv_index&timezone=America%2FLos_Angeles';
+
+  function wmoToParody(code, tempC, humidity) {
+    var foggy = code === 45 || code === 48;
+    var clear = code === 0;
+    var cloudy = code >= 1 && code <= 3;
+    var rainy = (code >= 51 && code <= 67) || (code >= 80 && code <= 82);
+    var stormy = code >= 95;
+    if (foggy || (humidity > 85 && tempC < 16)) {
+      return {
+        cond: '🚨 DENSE FOG ADVISORY (Live)',
+        temp: tempC + '°C / ' + Math.round(tempC * 9/5 + 32) + '°F',
+        extra: 'Visibility: ' + (humidity > 90 ? '0.5' : '2') + ' otters<br>UV Index: "What\'s UV?"<br>Humidity: ' + humidity + '%<br>Wind: ' + (5 + Math.round(Math.random() * 15)) + ' mph of marine layer'
+      };
+    }
+    if (stormy) {
+      return {
+        cond: '⛈️ CSUMB HAS BECOME A WAR ZONE (Live)',
+        temp: tempC + '°C / ' + Math.round(tempC * 9/5 + 32) + '°F',
+        extra: 'Visibility: 0 otters (seek shelter)<br>UV Index: N/A (sky is angry)<br>Humidity: ' + humidity + '%<br>Wind: Apocalyptic'
+      };
+    }
+    if (rainy) {
+      return {
+        cond: '🌧️ The Fog Has Manifested (Live)',
+        temp: tempC + '°C / ' + Math.round(tempC * 9/5 + 32) + '°F',
+        extra: 'Visibility: 1 otter (wet)<br>UV Index: Blocked by existential dread<br>Humidity: ' + humidity + '%<br>Condition: Water falling from sky, as foretold'
+      };
+    }
+    if (cloudy) {
+      return {
+        cond: '☁️ Marine Layer Holding Strong (Live)',
+        temp: tempC + '°C / ' + Math.round(tempC * 9/5 + 32) + '°F',
+        extra: 'Visibility: 3 otters<br>UV Index: "Maybe tomorrow"<br>Humidity: ' + humidity + '%<br>Forecast: Clouds, then more clouds'
+      };
+    }
+    if (clear) {
+      return {
+        cond: '🌤️ WHAT IS THIS? THE SUN?? (Live)',
+        temp: tempC + '°C / ' + Math.round(tempC * 9/5 + 32) + '°F',
+        extra: 'Visibility: 50 otters (campus in shock)<br>UV Index: ACTUALLY EXISTS<br>Humidity: ' + humidity + '%<br>Warning: Sun may cause confusion and brief happiness'
+      };
+    }
+    return {
+      cond: '🌫️ Fog Adjacent Conditions (Live)',
+      temp: tempC + '°C / ' + Math.round(tempC * 9/5 + 32) + '°F',
+      extra: 'Visibility: ¯\\_(ツ)_/¯ otters<br>UV Index: Gone<br>Humidity: ' + humidity + '%<br>Forecast: Fog will find you'
+    };
+  }
+
+  function updateWeatherWidget(widget, data) {
+    if (!widget) return;
+    var condEl = widget.querySelector('.cond');
+    var tempEl = widget.querySelector('.temp');
+    var extraEl = widget.querySelector('div[style*="margin-top: 6px"]') || widget.querySelector('div[style*="font-size: 11px"]') || widget.querySelector('div[style*="font-size: 12px"]');
+    if (condEl) condEl.textContent = data.cond;
+    if (tempEl) tempEl.textContent = data.temp;
+    if (extraEl) extraEl.innerHTML = data.extra + '<br>Forecast: More fog';
+  }
+
+  function fetchWeather() {
+    return fetch(WEATHER_API)
+      .then(function(r) { return r.json(); })
+      .then(function(json) {
+        var c = json.current;
+        var parody = wmoToParody(c.weather_code, c.temperature_2m, c.relative_humidity_2m);
+        document.querySelectorAll('.weather-widget').forEach(function(w) {
+          updateWeatherWidget(w, parody);
+        });
+      })
+      .catch(function() {
+        var fallback = { cond: '🌫️ Fog Advisory (Data Lost in the Fog)', temp: '57°F / 14°C', extra: 'Visibility: ¯\\_(ツ)_/¯<br>UV Index: Not today<br>Humidity: Yes<br>Live data got lost in the marine layer' };
+        document.querySelectorAll('.weather-widget').forEach(function(w) {
+          updateWeatherWidget(w, fallback);
+        });
+      });
+  }
+
+  fetchWeather();
+  setInterval(fetchWeather, 600000);
+
   document.querySelectorAll('.weather-refresh').forEach(function(btn) {
     btn.addEventListener('click', function(e) {
       e.preventDefault();
-      var widget = this.parentElement;
-      var idx = Math.floor(Math.random() * conditions.length);
-      var c = conditions[idx];
-      widget.querySelector('.cond').textContent = c.cond;
-      widget.querySelector('.temp').textContent = c.temp;
-      var extraDiv = widget.querySelector('div[style*="margin-top: 6px"]') || widget.querySelector('div[style*="font-size: 11px"]');
-      if (extraDiv) {
-        extraDiv.innerHTML = c.extra + '<br>Forecast: More fog';
-      }
+      var self = this;
+      self.textContent = '↻ Refreshing...';
+      self.disabled = true;
+      fetchWeather().then(function() {
+        self.textContent = '↻ ✓ Live';
+        setTimeout(function() { self.textContent = '↻ Refresh'; self.disabled = false; }, 2000);
+      }).catch(function() {
+        self.textContent = '↻ Refresh';
+        self.disabled = false;
+      });
     });
   });
 })();

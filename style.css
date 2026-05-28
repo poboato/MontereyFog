@@ -892,11 +892,12 @@ h1, h2, h3, h4 {
   border-radius: 50%;
   pointer-events: none;
   z-index: 99998;
-  animation: particleFly 1.2s ease-out forwards;
+  animation: particleFly 0.6s ease-out forwards;
 }
 
 @keyframes particleFly {
   0% { opacity: 1; transform: translate(0, 0) scale(1); }
+  70% { opacity: 0.5; }
   100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.2); }
 }
 
@@ -905,7 +906,7 @@ h1, h2, h3, h4 {
   height: auto;
   font-size: 22px;
   border-radius: 0;
-  animation: particleFly 1.4s ease-out forwards;
+  animation: particleFly 0.7s ease-out forwards;
 }
 
 .rub-float {
@@ -962,7 +963,7 @@ h1, h2, h3, h4 {
   pointer-events: none;
   z-index: 99997;
   background: radial-gradient(circle at center, rgba(201,168,76,0.15) 0%, transparent 70%);
-  animation: flashFade 0.8s ease-out forwards;
+  animation: flashFade 0.3s ease-out forwards;
 }
 
 @keyframes flashFade {
@@ -1028,7 +1029,7 @@ h1, h2, h3, h4 {
   box-shadow: 0 4px 20px rgba(0,0,0,0.3);
   max-width: 220px;
   text-align: left;
-  animation: badgeSlideIn 0.5s ease-out;
+  animation: badgeSlideIn 0.3s ease-out;
   pointer-events: auto;
 }
 
