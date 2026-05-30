@@ -8,16 +8,19 @@
 | **URL** | Local development (`csumb/index.html`) |
 | **Tone** | Affectionate parody — edgy jokes rooted in real CSUMB news, balanced with genuine positive spin |
 | **Audience** | Current students, alumni, prospective students who get the joke |
-| **Status** | Active development |
+| **Status** | Published |
 
 ## 2. Site Architecture
 
 ```
-csumb/
-  index.html     — HTML content (606 lines)
-  style.css      — All styles (~660 lines)
+.
+  index.html     — Main page
+  404.html       — Custom 404 page
+  apply.html     — Parody application page
+  style.css      — All styles
   script.js      — Tab switching, nav toggle, smooth scroll
-  PLAN.md        — This file
+  .nojekyll      — GitHub Pages config
+  .github/workflows/deploy.yml  — CI/CD to GitHub Pages
 ```
 
 - **Single-page app** with 6 tabs: Home, Academics, Housing (LOL), Dining (8 concepts!), Fog Report, Parking @ $588/yr
@@ -78,14 +81,11 @@ csumb/
 - **News:** Parking protest, $588 permit pricing
 - **Sidebar:** Permit Rates, Alternatives to Driving
 
-## 5. Current Tech Debt
+## 5. Remaining Tech Debt
 
-- [ ] **Favicon** — missing (browser shows default)
-- [ ] **Meta tags** — no description, OG tags, or social preview
 - [ ] **Image hosting** — Unsplash hotlinks with no local fallback
-- [ ] **Weather widget** — static text, no live API integration
 - [ ] **Accessibility** — missing `aria-` attributes, some images lack meaningful alt text
-- [ ] **Inline styles remain** — ~8 inline `style` attributes still in HTML should be moved to CSS classes
+- [ ] **Inline styles remain** — a few inline `style` attributes still in HTML should be moved to CSS classes
 
 ## 6. Roadmap
 
