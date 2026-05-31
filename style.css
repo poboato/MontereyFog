@@ -1193,4 +1193,60 @@ h1, h2, h3, h4 {
   .stats-inner { grid-template-columns: repeat(2, 1fr); gap: 16px; }
   .stat-number { font-size: 1.6rem; }
   .stat-item:nth-child(n+3) { margin-top: 4px; }
+  .news-item { padding: 12px 0; }
+  .fun-fact, .shoutout { padding: 10px 14px; font-size: 12px; }
+  .testimonial { padding: 12px 14px; }
+  .card { padding: 14px; }
+  .card h3 { font-size: 0.9rem; }
+  .modal { max-width: 94%; }
+  .rub-toast { max-width: 88%; font-size: 14px; padding: 14px 20px; }
+  .otter-counter { bottom: 12px; right: 12px; font-size: 12px; padding: 8px 12px; }
+  .scroll-top { bottom: 60px; right: 12px; width: 36px; height: 36px; font-size: 16px; }
+  .badge-container { right: 8px; max-width: 180px; }
+  .reward-badge { padding: 8px 12px; font-size: 12px; max-width: 180px; }
+  .positivity-meter { flex-wrap: wrap; }
+  .weather-extras { font-size: 11px; }
+}
+
+@media (max-width: 480px) {
+  .hero { min-height: 280px; }
+  .hero-seal { width: 90px; height: 90px; }
+  .hero-right h1 { font-size: 1.3rem; }
+  .hero-content { padding: 24px 16px; gap: 14px; }
+  .header-actions a { font-size: 10px; padding: 5px 7px; }
+  .header-actions .portal-btn { font-size: 10px; padding: 5px 8px; }
+  .main-content { padding: 14px; }
+  .main-content h2 { font-size: 1.15rem; }
+  .main-content p { font-size: 13px; }
+  .stats-ribbon { padding: 20px 14px; }
+  .stat-number { font-size: 1.3rem; }
+  .stat-label { font-size: 9px; }
+  .news-item h4 { font-size: 14px; }
+  .news-item p { font-size: 12px; }
+  .fun-fact, .shoutout { padding: 8px 12px; font-size: 11px; }
+  .testimonial { padding: 10px 12px; font-size: 12px; }
+  .card { padding: 12px; }
+  .pro, .con { padding: 8px 10px; font-size: 11px; }
+  .modal { max-width: 96%; border-radius: 10px; }
+  .modal-body { padding: 14px 14px 6px; font-size: 13px; }
+  .modal-header { padding: 12px 14px; font-size: 1rem; }
+  .modal-footer { padding: 8px 14px 14px; }
+  .rub-toast { max-width: 92%; font-size: 13px; padding: 12px 16px; }
+  .rub-toast .pct { font-size: 1.6rem; }
+  .otter-counter { bottom: 8px; right: 8px; font-size: 11px; padding: 6px 10px; }
+  .badge-container { top: auto; bottom: 60px; right: 8px; transform: none; max-width: 160px; }
+  .reward-badge { padding: 6px 10px; font-size: 11px; max-width: 160px; }
+  .reward-badge .badge-title { font-size: 0.85rem; }
+  .scroll-top { bottom: 50px; right: 8px; width: 32px; height: 32px; font-size: 14px; }
+  .hero-cta { padding: 8px 18px; font-size: 0.7rem; }
+  .subtitle { font-size: 0.8rem; }
+  .disclaimer { font-size: 11px; padding: 10px 12px; }
+  .coastal-img { max-height: 140px; }
+  .coastal-img img { height: 140px; }
+  .weather-widget .temp { font-size: 1.5rem; }
+  .nav a { padding: 10px 16px; font-size: 11px; }
+  .container { margin-top: 10px; gap: 16px; }
+  .footer { padding: 24px 14px 16px; font-size: 11px; }
+  .visitor-count { display: block; margin-left: 0; margin-top: 4px; }
+  .form-row { grid-template-columns: 1fr; }
 }
