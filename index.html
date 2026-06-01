@@ -90,6 +90,7 @@
     <a href="#" data-tab="dining">Dining (8 concepts!)</a>
     <a href="#" data-tab="fog">Fog Report</a>
     <a href="#" data-tab="parking">Parking @ $588/yr</a>
+    <a href="#" data-tab="quiz">Quiz: Real or Parody?</a>
   </div>
 </div>
 
@@ -420,6 +421,21 @@
         🅿️ <strong>Pro tip:</strong> There is no pro tip. Parking here is a nightmare. Take the free bike from the Otter Cycle Center. Or the bus. Or accept the fog as your eternal companion and walk. We're all in this together.
       </div>
     </div>
+
+    <!-- QUIZ TAB -->
+    <div class="tab-panel" id="panel-quiz">
+      <h2>🧠 Real or Parody? — The CSUMB Quiz</h2>
+      <p>Think you know what's real about CSUMB and what we made up for the bit? Take the quiz and prove your otter knowledge.</p>
+      <div id="quizContainer">
+        <div id="quizProgress"></div>
+        <div id="quizCard" class="quiz-card">
+          <div id="quizQuestion" class="quiz-question"></div>
+          <div id="quizAnswers" class="quiz-answers"></div>
+          <div id="quizResult" class="quiz-result" style="display:none;"></div>
+        </div>
+        <div id="quizScore" class="quiz-score" style="display:none;"></div>
+      </div>
+    </div>
   </div>
 
   <div class="sidebar">
@@ -669,6 +685,28 @@
 
       <div class="shoutout">
         <strong>🚗 Real talk:</strong> The parking situation is bad. We know. The university knows. The state knows. Bring a bike. Or good shoes. Or a therapist.
+      </div>
+    </div>
+
+    <!-- QUIZ SIDEBAR -->
+    <div class="tab-panel-sidebar" id="sidebar-quiz">
+      <div class="card">
+        <h3>🏆 Quiz Leaderboard</h3>
+        <div id="quizLeaderboard">
+          <p style="font-size:13px;color:var(--text-secondary);">Play the quiz to see your best score!</p>
+        </div>
+      </div>
+      <div class="card">
+        <h3>📋 How It Works</h3>
+        <ul>
+          <li>You'll be shown 10 facts about CSUMB</li>
+          <li>Guess whether each one is <strong>Real</strong> or <strong>Parody</strong></li>
+          <li>Get instant feedback with the real story</li>
+          <li>Your best score is saved locally</li>
+        </ul>
+      </div>
+      <div class="fun-fact fun-fact--flush">
+        🦦 <strong>Pro tip:</strong> If you're unsure, guess "Real." CSUMB is weird enough that most of the good stuff is actually true.
       </div>
     </div>
   </div>

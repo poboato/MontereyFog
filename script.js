@@ -622,3 +622,191 @@ function triggerEffect(fx) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   });
 })();
+
+/* ── Real vs. Parody Quiz ── */
+
+(function() {
+  var questions = [
+    { fact: 'The CSUMB library cost $64 million to build and students are allowed to eat and drink inside it.', answer: 'real', explanation: 'The Tanimura & Antle Library is 136,000 sq ft of glass, concrete, and "architectural performance art." Food and drink are welcome.', source: 'csumb.edu / local news' },
+    { fact: 'CSUMB issues every incoming freshman a compass because students frequently get lost in the fog.', answer: 'parody', explanation: 'They don\'t issue compasses. They just let you figure it out. That\'s called "character building."', source: 'Made up (but believable)' },
+    { fact: 'CSUMB\'s scientific diving program is the largest in the United States, training over 300 divers per year.', answer: 'real', explanation: 'CSUMB issues more scientific dive certifications than any other university in the country.', source: 'csumb.edu / NOAA' },
+    { fact: 'There is a mandatory 1-credit course called "Otter Etiquette 101" required for all freshmen.', answer: 'parody', explanation: 'There is no such course. But students do rub a bronze otter\'s nose for good luck, which is somehow weirder.', source: 'Made up (but we wish)' },
+    { fact: '61% of CSUMB students are first-generation college students.', answer: 'real', explanation: 'Nearly two-thirds of students are the first in their family to attend college.', source: 'csumb.edu / U.S. News' },
+    { fact: 'The dining hall\'s "Ghost Kitchen" is actually run by the ghost of a former Fort Ord chef.', answer: 'parody', explanation: 'The Ghost Kitchen is a real rotating concept at the Eatery — but it\'s run by living, breathing culinary staff. Probably.', source: 'Made up (the Ghost Kitchen is real, the ghost is not)' },
+    { fact: 'CSUMB ranks #5 in the nation for social mobility, according to U.S. News & World Report.', answer: 'real', explanation: 'CSUMB consistently ranks among the top universities in the country for lifting students into higher economic brackets.', source: 'U.S. News & World Report' },
+    { fact: 'The school\'s fight song is called "Fog, Fog, Fog" and consists of a single note held for 30 seconds.', answer: 'parody', explanation: 'CSUMB doesn\'t actually have a fight song. They have fog. Lots of fog. The fog doesn\'t sing.', source: 'Made up' },
+    { fact: 'The CSUMB campus was built on a decommissioned Army base — Fort Ord, closed in 1994.', answer: 'real', explanation: 'Fort Ord was a major Army training base until 1994. CSUMB was founded the same year on the same land, reusing many of the buildings.', source: 'csumb.edu / Wikipedia' },
+    { fact: 'The university offers a minor in "Fog Appreciation Studies."', answer: 'parody', explanation: 'There is no such minor. But with 180+ foggy days per year, students certainly get enough hands-on experience.', source: 'Made up' }
+  ];
+
+  var LS_KEY = 'montereyfog-quiz-best';
+  var current = 0;
+  var score = 0;
+  var answered = [];
+
+  function shuffle(a) {
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+    }
+    return a;
+  }
+
+  function renderProgress() {
+    var el = document.getElementById('quizProgress');
+    if (!el) return;
+    var html = '';
+    for (var i = 0; i < questions.length; i++) {
+      var cls = 'quiz-dot';
+      if (i === current && !answered[i]) cls += ' current';
+      else if (answered[i] === true) cls += ' correct';
+      else if (answered[i] === false) cls += ' wrong';
+      html += '<span class="' + cls + '"></span>';
+    }
+    el.innerHTML = html;
+  }
+
+  function renderQuestion() {
+    var q = questions[current];
+    var card = document.getElementById('quizQuestion');
+    var answers = document.getElementById('quizAnswers');
+    var result = document.getElementById('quizResult');
+    var scoreEl = document.getElementById('quizScore');
+    if (card) card.textContent = (current + 1) + '. ' + q.fact;
+    if (result) result.style.display = 'none';
+    if (scoreEl) scoreEl.style.display = 'none';
+
+    if (answers) {
+      answers.innerHTML =
+        '<button class="quiz-btn real" data-answer="real">✅ Real</button>' +
+        '<button class="quiz-btn parody" data-answer="parody">❌ Parody</button>';
+      answers.querySelectorAll('.quiz-btn').forEach(function(btn) {
+        btn.addEventListener('click', handleAnswer);
+      });
+    }
+    renderProgress();
+  }
+
+  function handleAnswer(e) {
+    if (answered[current] !== undefined) return;
+    var q = questions[current];
+    var chosen = e.currentTarget.getAttribute('data-answer');
+    var correct = chosen === q.answer;
+    answered[current] = correct;
+    if (correct) score++;
+
+    var answers = document.getElementById('quizAnswers');
+    answers.querySelectorAll('.quiz-btn').forEach(function(btn) {
+      btn.disabled = true;
+      var a = btn.getAttribute('data-answer');
+      if (a === q.answer) btn.classList.add('correct');
+      else if (a === chosen) btn.classList.add('wrong');
+      btn.classList.add('reveal');
+    });
+
+    var result = document.getElementById('quizResult');
+    if (result) {
+      result.style.display = 'block';
+      result.className = 'quiz-result ' + (correct ? 'correct' : 'wrong');
+      result.innerHTML = (correct ? '✅ Correct! ' : '❌ Nope! ') + q.explanation +
+        '<span class="quiz-source">Source: ' + q.source + '</span>' +
+        (current < questions.length - 1
+          ? '<button class="quiz-next" id="quizNext">Next →</button>'
+          : '<button class="quiz-next" id="quizNext">See Results 🏆</button>');
+      document.getElementById('quizNext').addEventListener('click', function() {
+        current++;
+        if (current < questions.length) {
+          renderQuestion();
+        } else {
+          showResults();
+        }
+      });
+    }
+    renderProgress();
+  }
+
+  function showResults() {
+    document.getElementById('quizQuestion').textContent = '';
+    document.getElementById('quizAnswers').innerHTML = '';
+    document.getElementById('quizResult').style.display = 'none';
+
+    var pct = Math.round(score / questions.length * 100);
+    var rank;
+    if (pct === 100) rank = '🎓 Otter Professor — You know CSUMB better than the administration!';
+    else if (pct >= 80) rank = '🦦 Senior Otter — You\'ve rubbed the statue\'s nose enough times.';
+    else if (pct >= 60) rank = '📚 Junior Otter — Not bad! You\'ve definitely been to the library.';
+    else if (pct >= 40) rank = '🌫️ Sophomore — The fog is clouding your judgment a bit.';
+    else if (pct >= 20) rank = '🐣 Freshman — You just got here. It\'s fine.';
+    else rank = '🅿️ Lot B Enthusiast — You spend too much time in the parking lot.';
+
+    var best = parseInt(localStorage.getItem(LS_KEY), 10) || 0;
+    if (score > best) {
+      best = score;
+      localStorage.setItem(LS_KEY, best);
+    }
+
+    var scoreEl = document.getElementById('quizScore');
+    if (scoreEl) {
+      scoreEl.style.display = 'block';
+      scoreEl.innerHTML =
+        '<h3>🎉 Quiz Complete!</h3>' +
+        '<div class="score-num">' + score + ' / ' + questions.length + '</div>' +
+        '<div class="score-label">' + pct + '% correct</div>' +
+        '<div class="score-rank">' + rank + '</div>' +
+        '<div class="quiz-best">Best: ' + best + ' / ' + questions.length + '</div>' +
+        '<button class="quiz-restart" id="quizRestart">🔄 Play Again</button>';
+      document.getElementById('quizRestart').addEventListener('click', resetQuiz);
+    }
+
+    renderProgress();
+    updateLeaderboard(best);
+  }
+
+  function updateLeaderboard(best) {
+    var el = document.getElementById('quizLeaderboard');
+    if (!el) return;
+    var pct = Math.round(best / questions.length * 100);
+    el.innerHTML =
+      '<p style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px;">🏆 Best Score</p>' +
+      '<div style="font-size:2rem;font-weight:800;color:#c9a84c;font-family:\'Inter\',sans-serif;">' + best + ' / ' + questions.length + '</div>' +
+      '<div style="font-size:12px;color:var(--text-secondary);">' + pct + '% correct</div>' +
+      '<div style="font-size:11px;color:var(--text-muted);margin-top:8px;">' +
+      (best === questions.length ? '🦦 Perfect score! You\'re basically an otter.' : best > 0 ? 'Keep rafting up!' : 'Play the quiz to see your score here.') +
+      '</div>';
+  }
+
+  function resetQuiz() {
+    current = 0;
+    score = 0;
+    answered = [];
+    shuffle(questions);
+    renderQuestion();
+    document.getElementById('quizScore').style.display = 'none';
+  }
+
+  function initQuiz() {
+    var panel = document.getElementById('panel-quiz');
+    if (!panel) return;
+    shuffle(questions);
+    answered = [];
+    current = 0;
+    score = 0;
+    renderQuestion();
+    var best = parseInt(localStorage.getItem(LS_KEY), 10) || 0;
+    updateLeaderboard(best);
+  }
+
+  document.addEventListener('tabchange', function() {
+    var panel = document.getElementById('panel-quiz');
+    if (panel && panel.classList.contains('active')) {
+      if (current === 0 && score === 0 && answered.length === 0) {
+        initQuiz();
+      } else {
+        updateLeaderboard(parseInt(localStorage.getItem(LS_KEY), 10) || 0);
+      }
+    }
+  });
+
+  var best = parseInt(localStorage.getItem(LS_KEY), 10) || 0;
+  if (best > 0) updateLeaderboard(best);
+})();
