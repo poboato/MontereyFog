@@ -705,12 +705,34 @@
           <li>Your best score is saved locally</li>
         </ul>
       </div>
+
+      <div class="card">
+        <h3>🔘 Fog Density</h3>
+        <p style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;">Adjust the fog to your desired level of visibility.</p>
+        <div class="fog-slider-wrap">
+          <span style="font-size:14px;">☀️</span>
+          <input type="range" id="fogSlider" class="fog-slider" min="0" max="100" value="0">
+          <span style="font-size:14px;">🌫️</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text-muted);margin-top:2px;">
+          <span>Clear</span>
+          <span id="fogLabel">0%</span>
+          <span>Dense</span>
+        </div>
+        <label class="fog-sim-toggle" id="fogSimLabel">
+          <input type="checkbox" id="fogSimCheck"> 🌊 Fog Simulation
+        </label>
+      </div>
+
       <div class="fun-fact fun-fact--flush">
         🦦 <strong>Pro tip:</strong> If you're unsure, guess "Real." CSUMB is weird enough that most of the good stuff is actually true.
       </div>
     </div>
   </div>
 </div>
+
+<div class="fog-overlay" id="fogOverlay"></div>
+<button class="fog-toggle" id="fogToggle" aria-label="Toggle fog overlay">🌫️</button>
 
 <div class="footer">
   <div class="footer-inner">

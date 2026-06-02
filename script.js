@@ -810,3 +810,127 @@ function triggerEffect(fx) {
   var best = parseInt(localStorage.getItem(LS_KEY), 10) || 0;
   if (best > 0) updateLeaderboard(best);
 })();
+
+/* ── Fog Density Overlay ── */
+
+(function() {
+  var FOG_KEY = 'montereyfog-fog';
+  var SIM_KEY = 'montereyfog-sim';
+  var overlay = document.getElementById('fogOverlay');
+  var slider = document.getElementById('fogSlider');
+  var label = document.getElementById('fogLabel');
+  var toggle = document.getElementById('fogToggle');
+  var simCheck = document.getElementById('fogSimCheck');
+
+  var particles = [];
+  var particleTimer = null;
+  var active = false;
+
+  function setFog(val) {
+    val = Math.max(0, Math.min(100, val));
+    overlay.style.opacity = val / 100 * 0.6;
+    if (val > 0) {
+      overlay.classList.add('drifting');
+    } else {
+      overlay.classList.remove('drifting');
+    }
+    if (label) label.textContent = val + '%';
+    if (slider) slider.value = val;
+    localStorage.setItem(FOG_KEY, val);
+    if (val > 0) active = true;
+    updateParticles();
+  }
+
+  function restoreFog() {
+    var val = parseInt(localStorage.getItem(FOG_KEY), 10) || 0;
+    if (val > 0) {
+      active = true;
+      setFog(val);
+    }
+    var sim = localStorage.getItem(SIM_KEY) === 'true';
+    if (simCheck) simCheck.checked = sim;
+    if (sim) updateParticles();
+  }
+
+  function spawnParticle() {
+    var el = document.createElement('div');
+    el.className = 'fog-particle';
+    var size = 80 + Math.random() * 160;
+    el.style.width = size + 'px';
+    el.style.height = (size * 0.4) + 'px';
+    el.style.left = (Math.random() * 100) + '%';
+    el.style.bottom = '-60px';
+    el.style.opacity = 0.15 + Math.random() * 0.3;
+    var dur = 8 + Math.random() * 14;
+    el.style.animation = 'fogRise ' + dur + 's linear forwards';
+    document.body.appendChild(el);
+    particles.push(el);
+    setTimeout(function() {
+      if (el.parentNode) el.remove();
+      var idx = particles.indexOf(el);
+      if (idx !== -1) particles.splice(idx, 1);
+    }, dur * 1000);
+  }
+
+  function updateParticles() {
+    var val = parseInt(localStorage.getItem(FOG_KEY), 10) || 0;
+    var sim = simCheck ? simCheck.checked : false;
+    if (particleTimer) { clearInterval(particleTimer); particleTimer = null; }
+    particles.forEach(function(p) { if (p.parentNode) p.remove(); });
+    particles = [];
+    if (val > 0 && sim) {
+      var interval = Math.max(400, 2000 - val * 16);
+      particleTimer = setInterval(spawnParticle, interval);
+      for (var i = 0; i < 4; i++) setTimeout(spawnParticle, i * 300);
+    }
+  }
+
+  if (slider) {
+    slider.addEventListener('input', function() {
+      setFog(parseInt(this.value, 10));
+    });
+  }
+
+  if (simCheck) {
+    simCheck.addEventListener('change', function() {
+      localStorage.setItem(SIM_KEY, this.checked);
+      updateParticles();
+    });
+  }
+
+  if (toggle) {
+    toggle.addEventListener('click', function() {
+      var val = parseInt(localStorage.getItem(FOG_KEY), 10) || 0;
+      if (val > 0) {
+        setFog(0);
+        toggle.classList.remove('active');
+        toggle.textContent = '🌫️';
+      } else {
+        var restore = 45;
+        setFog(restore);
+        toggle.classList.add('active');
+        toggle.textContent = '☀️';
+      }
+    });
+    var cur = parseInt(localStorage.getItem(FOG_KEY), 10) || 0;
+    if (cur > 0) {
+      toggle.classList.add('active');
+      toggle.textContent = '☀️';
+    }
+  }
+
+  if (!document.getElementById('fogRiseStyle')) {
+    var style = document.createElement('style');
+    style.id = 'fogRiseStyle';
+    style.textContent =
+      '@keyframes fogRise {' +
+      '  0% { transform: translateX(0) translateY(0) scale(0.6); opacity: 0; }' +
+      '  10% { opacity: 0.3; }' +
+      '  80% { opacity: 0.2; }' +
+      '  100% { transform: translateX(' + (30 + Math.random() * 40) + 'px) translateY(-110vh) scale(1.2); opacity: 0; }' +
+      '}';
+    document.head.appendChild(style);
+  }
+
+  restoreFog();
+})();
