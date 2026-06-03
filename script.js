@@ -828,7 +828,7 @@ function triggerEffect(fx) {
 
   function setFog(val) {
     val = Math.max(0, Math.min(100, val));
-    var opacity = val / 100 * 0.95;
+    var opacity = val / 100;
     overlay.style.opacity = val > 0 ? 1 : 0;
     layers.forEach(function(layer) {
       layer.style.opacity = opacity;
