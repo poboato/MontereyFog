@@ -828,7 +828,7 @@ function triggerEffect(fx) {
 
   function setFog(val) {
     val = Math.max(0, Math.min(100, val));
-    var opacity = val / 100 * 0.65;
+    var opacity = val / 100 * 0.95;
     overlay.style.opacity = val > 0 ? 1 : 0;
     layers.forEach(function(layer) {
       layer.style.opacity = opacity;
@@ -871,9 +871,9 @@ function triggerEffect(fx) {
     if (particleTimer) { clearInterval(particleTimer); particleTimer = null; }
     if (particlesContainer) particlesContainer.innerHTML = '';
     if (val > 0 && sim) {
-      var interval = Math.max(500, 2500 - val * 20);
+      var interval = Math.max(800, 3000 - val * 22);
       particleTimer = setInterval(spawnParticle, interval);
-      for (var i = 0; i < 5; i++) setTimeout(spawnParticle, i * 400);
+      for (var i = 0; i < 3; i++) setTimeout(spawnParticle, i * 500);
     }
   }
 

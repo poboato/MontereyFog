@@ -1493,14 +1493,13 @@ h1, h2, h3, h4 {
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.6s ease;
-  backdrop-filter: blur(1px);
+  transform: translateZ(0);
 }
 
 .fog-layer {
   position: absolute;
   inset: -40px;
   border-radius: 50%;
-  will-change: transform;
   opacity: 0;
   transition: opacity 0.8s ease;
 }
@@ -1508,15 +1507,31 @@ h1, h2, h3, h4 {
 /* ── Base haze ── */
 
 .fog-layer-1 {
-  background: radial-gradient(ellipse at 30% 60%, rgba(210,220,235,0.35) 0%, rgba(190,205,220,0.15) 35%, transparent 65%);
-  filter: blur(80px);
-  animation: fogSway 25s ease-in-out infinite alternate;
+  background: radial-gradient(ellipse at 30% 60%, rgba(210,220,235,0.6) 0%, rgba(190,205,220,0.35) 35%, transparent 65%);
+  filter: blur(70px);
+  animation: fogSway1 25s ease-in-out infinite alternate;
+  will-change: transform;
 }
 
-@keyframes fogSway {
+@keyframes fogSway1 {
   0% { transform: translate(-30px, -15px) scale(1); }
-  50% { transform: translate(20px, 10px) scale(1.03); }
-  100% { transform: translate(-15px, -5px) scale(0.98); }
+  50% { transform: translate(20px, 10px) scale(1.04); }
+  100% { transform: translate(-15px, -5px) scale(0.97); }
+}
+
+/* ── Deep cloud layer ── */
+
+.fog-layer-2 {
+  background: radial-gradient(ellipse at 70% 30%, rgba(215,225,240,0.45) 0%, rgba(195,210,225,0.2) 40%, transparent 75%);
+  filter: blur(100px);
+  animation: fogSway2 30s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+@keyframes fogSway2 {
+  0% { transform: translate(15px, 5px) scale(0.98); }
+  50% { transform: translate(-25px, -15px) scale(1.05); }
+  100% { transform: translate(20px, -8px) scale(1.01); }
 }
 
 /* ── Rolling density waves ── */
@@ -1527,27 +1542,28 @@ h1, h2, h3, h4 {
   background:
     repeating-linear-gradient(
       90deg,
-      rgba(215,225,240,0.25) 0px,
-      rgba(215,225,240,0.04) 80px,
-      rgba(215,225,240,0.2) 160px,
-      rgba(215,225,240,0.02) 280px,
-      rgba(215,225,240,0.22) 400px,
-      rgba(215,225,240,0.03) 520px,
-      rgba(215,225,240,0.18) 640px
+      rgba(215,225,240,0.45) 0px,
+      rgba(215,225,240,0.08) 80px,
+      rgba(215,225,240,0.38) 160px,
+      rgba(215,225,240,0.04) 280px,
+      rgba(215,225,240,0.4) 400px,
+      rgba(215,225,240,0.05) 520px,
+      rgba(215,225,240,0.35) 640px
     ),
     repeating-linear-gradient(
       120deg,
-      rgba(220,230,245,0.12) 0px,
+      rgba(220,230,245,0.2) 0px,
       transparent 60px,
-      rgba(220,230,245,0.08) 120px,
+      rgba(220,230,245,0.12) 120px,
       transparent 200px,
-      rgba(220,230,245,0.15) 300px
+      rgba(220,230,245,0.18) 300px
     );
   background-size: 700px 100%, 400px 100%;
-  background-blend-mode: normal;
-  filter: blur(4px);
+  background-blend-mode: screen;
+  filter: blur(3px);
   animation: fogRoll 10s linear infinite;
-  mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 12%, black 88%, transparent 100%);
+  will-change: background-position;
 }
 
 @keyframes fogRoll {
@@ -1555,13 +1571,13 @@ h1, h2, h3, h4 {
   100% { background-position: 700px 0, 400px 0; }
 }
 
-/* ── Banded density mask layer ── */
+/* ── Banded density ── */
 
 .fog-layer-bands {
   inset: 0;
   border-radius: 0;
-  background: radial-gradient(ellipse at 50% 50%, rgba(200,215,235,0.2) 0%, transparent 70%);
-  filter: blur(20px);
+  background: radial-gradient(ellipse at 50% 50%, rgba(200,215,235,0.4) 0%, transparent 70%);
+  filter: blur(8px);
   mask-image: repeating-linear-gradient(
     90deg,
     black 0px,
@@ -1574,6 +1590,7 @@ h1, h2, h3, h4 {
   );
   mask-size: 320px 100%;
   animation: bandRoll 14s linear infinite;
+  will-change: mask-position;
 }
 
 @keyframes bandRoll {
@@ -1581,93 +1598,10 @@ h1, h2, h3, h4 {
   100% { mask-position: 320px 0; }
 }
 
-/* ── Cloud shader layer ── */
-
-.fog-clouds {
-  inset: -100px;
-  border-radius: 0;
-  filter: contrast(12);
-  mix-blend-mode: screen;
-}
-
-.cloud-blob {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(30px);
-  will-change: transform;
-}
-
-.blob-1 {
-  width: 700px;
-  height: 400px;
-  top: 5%;
-  background: radial-gradient(ellipse, rgba(215,225,240,0.35) 0%, rgba(200,215,230,0.15) 50%, transparent 80%);
-  animation: rollBlob1 16s linear infinite;
-}
-
-.blob-2 {
-  width: 550px;
-  height: 300px;
-  top: 45%;
-  background: radial-gradient(ellipse, rgba(225,235,250,0.25) 0%, rgba(210,225,240,0.1) 50%, transparent 75%);
-  animation: rollBlob2 20s linear infinite;
-}
-
-.blob-3 {
-  width: 800px;
-  height: 280px;
-  top: 75%;
-  background: radial-gradient(ellipse, rgba(205,215,230,0.22) 0%, rgba(190,205,220,0.08) 50%, transparent 70%);
-  animation: rollBlob3 14s linear infinite;
-}
-
-.blob-4 {
-  width: 450px;
-  height: 450px;
-  top: 15%;
-  background: radial-gradient(ellipse, rgba(220,230,245,0.18) 0%, rgba(200,215,235,0.07) 50%, transparent 65%);
-  animation: rollBlob4 24s linear infinite;
-}
-
-.blob-5 {
-  width: 380px;
-  height: 220px;
-  top: 65%;
-  background: radial-gradient(ellipse, rgba(210,220,235,0.28) 0%, rgba(195,210,225,0.1) 50%, transparent 70%);
-  animation: rollBlob5 18s linear infinite;
-}
-
-/* ─── Horizontal rolling keyframes for cloud blobs ── */
-
-@keyframes rollBlob1 {
-  0% { left: -350px; }
-  100% { left: calc(100% + 50px); }
-}
-
-@keyframes rollBlob2 {
-  0% { left: -300px; }
-  100% { left: calc(100% + 100px); }
-}
-
-@keyframes rollBlob3 {
-  0% { left: -400px; }
-  100% { left: calc(100% + 50px); }
-}
-
-@keyframes rollBlob4 {
-  0% { left: -250px; }
-  100% { left: calc(100% + 150px); }
-}
-
-@keyframes rollBlob5 {
-  0% { left: -200px; }
-  100% { left: calc(100% + 100px); }
-}
-
 /* ─── Noise texture ── */
 
 .fog-layer-noise {
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.5' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.4'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 350px 350px;
   inset: 0;
@@ -1676,7 +1610,7 @@ h1, h2, h3, h4 {
   opacity: 0;
   transition: opacity 1s ease;
   mix-blend-mode: soft-light;
-  animation: noiseShift 8s linear infinite;
+  animation: noiseShift 12s linear infinite;
 }
 
 @keyframes noiseShift {
@@ -1687,42 +1621,40 @@ h1, h2, h3, h4 {
 /* ─── Dark mode ── */
 
 .dark-mode .fog-layer-1 {
-  background: radial-gradient(ellipse at 30% 60%, rgba(140,160,190,0.25) 0%, rgba(120,140,165,0.12) 35%, transparent 65%);
+  background: radial-gradient(ellipse at 30% 60%, rgba(140,160,190,0.4) 0%, rgba(120,140,165,0.22) 35%, transparent 65%);
+}
+
+.dark-mode .fog-layer-2 {
+  background: radial-gradient(ellipse at 70% 30%, rgba(145,165,195,0.3) 0%, rgba(125,145,170,0.14) 40%, transparent 75%);
 }
 
 .dark-mode .fog-layer-roll {
   background:
     repeating-linear-gradient(
       90deg,
-      rgba(140,160,190,0.18) 0px,
-      rgba(140,160,190,0.03) 80px,
-      rgba(140,160,190,0.14) 160px,
-      rgba(140,160,190,0.01) 280px,
-      rgba(140,160,190,0.16) 400px,
-      rgba(140,160,190,0.02) 520px,
-      rgba(140,160,190,0.12) 640px
+      rgba(140,160,190,0.25) 0px,
+      rgba(140,160,190,0.04) 80px,
+      rgba(140,160,190,0.2) 160px,
+      rgba(140,160,190,0.02) 280px,
+      rgba(140,160,190,0.22) 400px,
+      rgba(140,160,190,0.03) 520px,
+      rgba(140,160,190,0.18) 640px
     ),
     repeating-linear-gradient(
       120deg,
-      rgba(150,170,200,0.08) 0px,
+      rgba(150,170,200,0.12) 0px,
       transparent 60px,
-      rgba(150,170,200,0.05) 120px,
+      rgba(150,170,200,0.07) 120px,
       transparent 200px,
-      rgba(150,170,200,0.1) 300px
+      rgba(150,170,200,0.14) 300px
     );
 }
 
 .dark-mode .fog-layer-bands {
-  background: radial-gradient(ellipse at 50% 50%, rgba(130,150,180,0.14) 0%, transparent 70%);
+  background: radial-gradient(ellipse at 50% 50%, rgba(130,150,180,0.2) 0%, transparent 70%);
 }
 
-.dark-mode .blob-1 { background: radial-gradient(ellipse, rgba(140,160,190,0.25) 0%, rgba(120,140,165,0.1) 50%, transparent 80%); }
-.dark-mode .blob-2 { background: radial-gradient(ellipse, rgba(150,170,200,0.18) 0%, rgba(130,150,175,0.07) 50%, transparent 75%); }
-.dark-mode .blob-3 { background: radial-gradient(ellipse, rgba(130,150,175,0.16) 0%, rgba(115,135,160,0.06) 50%, transparent 70%); }
-.dark-mode .blob-4 { background: radial-gradient(ellipse, rgba(145,165,195,0.13) 0%, rgba(125,145,170,0.05) 50%, transparent 65%); }
-.dark-mode .blob-5 { background: radial-gradient(ellipse, rgba(135,155,180,0.2) 0%, rgba(120,140,165,0.08) 50%, transparent 70%); }
-
-.dark-mode .fog-layer-noise { opacity: 0.1; }
+.dark-mode .fog-layer-noise { opacity: 0.08; }
 
 /* ── Fog Slider ── */
 
@@ -1873,9 +1805,9 @@ h1, h2, h3, h4 {
   bottom: -80px;
   border-radius: 50%;
   background: radial-gradient(ellipse, rgba(210,220,235,0.25) 0%, rgba(200,215,230,0.1) 40%, transparent 70%);
-  filter: blur(20px);
+  filter: blur(18px);
   pointer-events: none;
-  will-change: transform, opacity;
+  will-change: transform;
 }
 
 /* ── MyRaft Status Widget ── */
