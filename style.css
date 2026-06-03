@@ -1667,3 +1667,81 @@ h1, h2, h3, h4 {
   z-index: 99994;
   will-change: transform;
 }
+
+/* ── MyRaft Status Widget ── */
+
+#myRaftWidget { font-size: 13px; }
+
+.myraft-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.myraft-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #dc3545;
+  animation: raftPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes raftPulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 4px #dc3545; }
+  50% { opacity: 0.4; box-shadow: 0 0 8px #dc3545; }
+}
+
+.myraft-service {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text);
+}
+
+.myraft-badge {
+  margin-left: auto;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: #dc3545;
+  color: white;
+}
+
+.myraft-message {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+  min-height: 18px;
+  transition: opacity 0.3s ease;
+}
+
+.myraft-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.myraft-refresh {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-strong);
+  color: var(--text-secondary);
+  padding: 5px 12px;
+  border-radius: 4px;
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'Inter', sans-serif;
+  width: 100%;
+}
+
+.myraft-refresh:hover {
+  background: var(--border-strong);
+  color: var(--text);
+}
+
+.myraft-refresh:disabled { opacity: 0.5; cursor: default; }

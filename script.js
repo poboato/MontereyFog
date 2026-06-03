@@ -934,3 +934,106 @@ function triggerEffect(fx) {
 
   restoreFog();
 })();
+
+/* ── MyRaft Status Widget ── */
+
+(function() {
+  var RAFT_KEY = 'montereyfog-raft';
+  var messages = [
+    'MyRaft is currently down for scheduled maintenance. (The schedule is: always.)',
+    'Error 503: Service Unavailable. Also Error 418: I\'m a teapot.',
+    'Connection to MyRaft timed out. The server is on a coffee break. It\'s been 3 years.',
+    'MyRaft is down. IT has been notified. IT is also down.',
+    'We\'ve tried nothing and we\'re all out of ideas. MyRaft is down.',
+    'MyRaft is loading. Please wait. We\'ve been saying that since 2019.',
+    'Database connection failed. The database is in Lot B. We can\'t find it.',
+    'MyRaft encountered an error: "The operation completed successfully." (It did not.)',
+    'Cannot connect to MyRaft. The server is behind a paywall. The paywall is also down.',
+    'MyRaft status: It\'s not you. It\'s us. It\'s definitely us. It\'s always us.',
+    'MyRaft has been down for 0 days, 0 hours, and approximately forever.',
+    'Warning: MyRaft may cause drowsiness, frustration, and a strong desire to transfer to a school with functional IT.',
+    'MyRaft is currently being rebooted. The reboot started in 2022. Please hold.',
+    'MyRaft is experiencing "spiritual difficulties." We\'ve consulted a shaman. He\'s also having trouble logging in.'
+  ];
+  var startTime = Date.now();
+
+  function getRaftData() {
+    var data = localStorage.getItem(RAFT_KEY);
+    if (data) {
+      try { return JSON.parse(data); } catch(e) {}
+    }
+    return { downSince: Date.now(), checks: 0, lastCheck: Date.now() };
+  }
+
+  function saveRaftData(data) {
+    localStorage.setItem(RAFT_KEY, JSON.stringify(data));
+  }
+
+  function formatDuration(ms) {
+    var seconds = Math.floor(ms / 1000);
+    var days = Math.floor(seconds / 86400);
+    seconds %= 86400;
+    var hours = Math.floor(seconds / 3600);
+    seconds %= 3600;
+    var mins = Math.floor(seconds / 60);
+    if (days > 0) return days + 'd ' + hours + 'h ' + mins + 'm';
+    if (hours > 0) return hours + 'h ' + mins + 'm';
+    if (mins > 0) return mins + 'm ' + seconds + 's';
+    return 'just now';
+  }
+
+  function updateWidget(animate) {
+    var dot = document.getElementById('raftDot');
+    var badge = document.getElementById('raftBadge');
+    var msg = document.getElementById('raftMsg');
+    var downtime = document.getElementById('raftDowntime');
+    var checked = document.getElementById('raftChecked');
+
+    if (!dot || !badge || !msg || !downtime || !checked) return;
+
+    dot.style.background = '#dc3545';
+    badge.textContent = 'DOWN';
+    badge.style.background = '#dc3545';
+
+    if (animate) {
+      msg.style.opacity = 0;
+      setTimeout(function() {
+        msg.textContent = messages[Math.floor(Math.random() * messages.length)];
+        msg.style.opacity = 1;
+      }, 200);
+    } else {
+      msg.textContent = messages[Math.floor(Math.random() * messages.length)];
+    }
+
+    var data = getRaftData();
+    var elapsed = Date.now() - data.downSince;
+    downtime.textContent = 'Downtime: ' + formatDuration(elapsed);
+    checked.textContent = formatDuration(Date.now() - data.lastCheck) + ' ago';
+  }
+
+  function handleRefresh() {
+    var btn = document.getElementById('raftRefresh');
+    if (!btn) return;
+    btn.disabled = true;
+    btn.textContent = '↻ Checking...';
+    var data = getRaftData();
+    data.checks++;
+    data.lastCheck = Date.now();
+    saveRaftData(data);
+
+    setTimeout(function() {
+      updateWidget(true);
+      btn.textContent = '↻ Still Down';
+      setTimeout(function() {
+        btn.textContent = '↻ Check Again';
+        btn.disabled = false;
+      }, 1000);
+    }, 1200 + Math.random() * 1800);
+  }
+
+  var btn = document.getElementById('raftRefresh');
+  if (btn) btn.addEventListener('click', handleRefresh);
+
+  updateWidget(false);
+  setInterval(function() { updateWidget(false); }, 15000);
+})();

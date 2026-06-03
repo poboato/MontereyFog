@@ -457,6 +457,23 @@
       </div>
 
       <div class="card">
+        <h3>🔄 MyRaft Status</h3>
+        <div id="myRaftWidget">
+          <div class="myraft-header">
+            <span class="myraft-dot" id="raftDot"></span>
+            <span class="myraft-service">myRaft</span>
+            <span class="myraft-badge" id="raftBadge">DOWN</span>
+          </div>
+          <div class="myraft-message" id="raftMsg">Connecting to server...</div>
+          <div class="myraft-meta">
+            <span id="raftDowntime">Downtime: calculating...</span>
+            <span id="raftChecked">now</span>
+          </div>
+          <button class="myraft-refresh" id="raftRefresh">↻ Check Again</button>
+        </div>
+      </div>
+
+      <div class="card">
         <h3>📋 Quick Facts</h3>
         <ul>
           <li><strong>Founded:</strong> 1994 (fog filed for residency same year)</li>
