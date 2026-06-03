@@ -817,58 +817,51 @@ function triggerEffect(fx) {
   var FOG_KEY = 'montereyfog-fog';
   var SIM_KEY = 'montereyfog-sim';
   var overlay = document.getElementById('fogOverlay');
+  var layers = overlay ? overlay.querySelectorAll('.fog-layer') : [];
+  var particlesContainer = document.getElementById('fogParticles');
   var slider = document.getElementById('fogSlider');
   var label = document.getElementById('fogLabel');
   var toggle = document.getElementById('fogToggle');
   var simCheck = document.getElementById('fogSimCheck');
 
-  var particles = [];
   var particleTimer = null;
-  var active = false;
 
   function setFog(val) {
     val = Math.max(0, Math.min(100, val));
-    overlay.style.opacity = val / 100 * 0.6;
-    if (val > 0) {
-      overlay.classList.add('drifting');
-    } else {
-      overlay.classList.remove('drifting');
-    }
+    var opacity = val / 100 * 0.65;
+    overlay.style.opacity = val > 0 ? 1 : 0;
+    layers.forEach(function(layer) {
+      layer.style.opacity = opacity;
+    });
     if (label) label.textContent = val + '%';
     if (slider) slider.value = val;
     localStorage.setItem(FOG_KEY, val);
-    if (val > 0) active = true;
     updateParticles();
   }
 
   function restoreFog() {
     var val = parseInt(localStorage.getItem(FOG_KEY), 10) || 0;
-    if (val > 0) {
-      active = true;
-      setFog(val);
-    }
+    if (val > 0) setFog(val);
     var sim = localStorage.getItem(SIM_KEY) === 'true';
     if (simCheck) simCheck.checked = sim;
     if (sim) updateParticles();
   }
 
   function spawnParticle() {
+    if (!particlesContainer) return;
     var el = document.createElement('div');
     el.className = 'fog-particle';
-    var size = 80 + Math.random() * 160;
+    var size = 160 + Math.random() * 280;
     el.style.width = size + 'px';
-    el.style.height = (size * 0.4) + 'px';
-    el.style.left = (Math.random() * 100) + '%';
-    el.style.bottom = '-60px';
-    el.style.opacity = 0.15 + Math.random() * 0.3;
-    var dur = 8 + Math.random() * 14;
+    el.style.height = (size * 0.35) + 'px';
+    el.style.left = (Math.random() * 110 - 5) + '%';
+    el.style.bottom = (-40 - Math.random() * 60) + 'px';
+    el.style.opacity = 0.12 + Math.random() * 0.2;
+    var dur = 14 + Math.random() * 18;
     el.style.animation = 'fogRise ' + dur + 's linear forwards';
-    document.body.appendChild(el);
-    particles.push(el);
+    particlesContainer.appendChild(el);
     setTimeout(function() {
       if (el.parentNode) el.remove();
-      var idx = particles.indexOf(el);
-      if (idx !== -1) particles.splice(idx, 1);
     }, dur * 1000);
   }
 
@@ -876,12 +869,11 @@ function triggerEffect(fx) {
     var val = parseInt(localStorage.getItem(FOG_KEY), 10) || 0;
     var sim = simCheck ? simCheck.checked : false;
     if (particleTimer) { clearInterval(particleTimer); particleTimer = null; }
-    particles.forEach(function(p) { if (p.parentNode) p.remove(); });
-    particles = [];
+    if (particlesContainer) particlesContainer.innerHTML = '';
     if (val > 0 && sim) {
-      var interval = Math.max(400, 2000 - val * 16);
+      var interval = Math.max(500, 2500 - val * 20);
       particleTimer = setInterval(spawnParticle, interval);
-      for (var i = 0; i < 4; i++) setTimeout(spawnParticle, i * 300);
+      for (var i = 0; i < 5; i++) setTimeout(spawnParticle, i * 400);
     }
   }
 
@@ -906,8 +898,7 @@ function triggerEffect(fx) {
         toggle.classList.remove('active');
         toggle.textContent = '🌫️';
       } else {
-        var restore = 45;
-        setFog(restore);
+        setFog(45);
         toggle.classList.add('active');
         toggle.textContent = '☀️';
       }
@@ -924,10 +915,10 @@ function triggerEffect(fx) {
     style.id = 'fogRiseStyle';
     style.textContent =
       '@keyframes fogRise {' +
-      '  0% { transform: translateX(0) translateY(0) scale(0.6); opacity: 0; }' +
-      '  10% { opacity: 0.3; }' +
-      '  80% { opacity: 0.2; }' +
-      '  100% { transform: translateX(' + (30 + Math.random() * 40) + 'px) translateY(-110vh) scale(1.2); opacity: 0; }' +
+      '  0% { transform: translateX(0) translateY(0) scale(0.5); opacity: 0; }' +
+      '  8% { opacity: 0.4; }' +
+      '  70% { opacity: 0.2; }' +
+      '  100% { transform: translateX(' + (20 + Math.random() * 50) + 'px) translateY(-120vh) scale(1.4); opacity: 0; }' +
       '}';
     document.head.appendChild(style);
   }
