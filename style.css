@@ -1507,8 +1507,9 @@ h1, h2, h3, h4 {
 .fog-layer-1 {
   inset: -40px;
   border-radius: 50%;
-  background: radial-gradient(ellipse at 30% 60%, rgba(210,220,235,0.85) 0%, rgba(190,205,220,0.55) 35%, transparent 65%);
+  background: radial-gradient(ellipse at 30% 60%, rgba(255,255,255,1) 0%, rgba(255,255,255,0.75) 35%, transparent 65%);
   filter: blur(50px);
+  mix-blend-mode: screen;
   animation: fogSway 25s ease-in-out infinite alternate;
   will-change: transform;
 }
@@ -1519,25 +1520,37 @@ h1, h2, h3, h4 {
   100% { transform: translate(-15px, -5px) scale(0.98); }
 }
 
-/* ── Rolling cloud bank A (fast, narrow) ── */
+/* ── Rolling cloud bank A (fast, narrow bands) ── */
 
 .fog-layer-roll-a {
   inset: 0;
   border-radius: 0;
   background: repeating-linear-gradient(
     90deg,
-    rgba(215,225,240,0.5) 0px,
-    transparent 60px,
-    rgba(215,225,240,0.45) 120px,
-    transparent 180px,
-    rgba(215,225,240,0.55) 240px,
-    transparent 320px,
-    rgba(215,225,240,0.4) 380px,
-    transparent 460px
+    rgba(255,255,255,0.9) 0px,
+    rgba(255,255,255,0) 40px,
+    rgba(255,255,255,0.85) 60px,
+    rgba(255,255,255,0) 80px,
+    rgba(255,255,255,0.9) 100px,
+    rgba(255,255,255,0) 140px,
+    rgba(255,255,255,0.85) 160px,
+    rgba(255,255,255,0) 180px,
+    rgba(255,255,255,0.9) 200px,
+    rgba(255,255,255,0) 240px,
+    rgba(255,255,255,0.85) 260px,
+    rgba(255,255,255,0) 280px,
+    rgba(255,255,255,0.9) 320px,
+    rgba(255,255,255,0) 360px,
+    rgba(255,255,255,0.85) 380px,
+    rgba(255,255,255,0) 400px,
+    rgba(255,255,255,0.9) 440px,
+    rgba(255,255,255,0) 480px,
+    rgba(255,255,255,0.9) 520px
   );
   background-size: 520px 100%;
+  mix-blend-mode: screen;
   animation: rollA 12s linear infinite;
-  mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 4%, black 96%, transparent 100%);
   will-change: background-position;
 }
 
@@ -1546,25 +1559,41 @@ h1, h2, h3, h4 {
   100% { background-position: 520px 0; }
 }
 
-/* ── Rolling cloud bank B (medium, wider) ── */
+/* ── Rolling cloud bank B (medium, wider bands) ── */
 
 .fog-layer-roll-b {
   inset: 0;
   border-radius: 0;
   background: repeating-linear-gradient(
     105deg,
-    rgba(210,225,240,0.42) 0px,
-    transparent 90px,
-    rgba(210,225,240,0.35) 180px,
-    transparent 280px,
-    rgba(210,225,240,0.5) 360px,
-    transparent 500px,
-    rgba(210,225,240,0.35) 560px,
-    transparent 680px
+    rgba(255,255,255,0.85) 0px,
+    rgba(255,255,255,0) 45px,
+    rgba(255,255,255,0.85) 70px,
+    rgba(255,255,255,0) 110px,
+    rgba(255,255,255,0.8) 135px,
+    rgba(255,255,255,0) 180px,
+    rgba(255,255,255,0.85) 205px,
+    rgba(255,255,255,0) 250px,
+    rgba(255,255,255,0.85) 275px,
+    rgba(255,255,255,0) 320px,
+    rgba(255,255,255,0.8) 345px,
+    rgba(255,255,255,0) 390px,
+    rgba(255,255,255,0.85) 415px,
+    rgba(255,255,255,0) 460px,
+    rgba(255,255,255,0.85) 485px,
+    rgba(255,255,255,0) 530px,
+    rgba(255,255,255,0.8) 555px,
+    rgba(255,255,255,0) 600px,
+    rgba(255,255,255,0.85) 625px,
+    rgba(255,255,255,0) 670px,
+    rgba(255,255,255,0.85) 695px,
+    rgba(255,255,255,0) 740px,
+    rgba(255,255,255,0.85) 780px
   );
   background-size: 780px 100%;
+  mix-blend-mode: screen;
   animation: rollB 20s linear infinite;
-  mask-image: linear-gradient(to bottom, transparent 3%, black 12%, black 88%, transparent 97%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 4%, black 96%, transparent 100%);
   will-change: background-position;
 }
 
@@ -1573,25 +1602,41 @@ h1, h2, h3, h4 {
   100% { background-position: 780px 0; }
 }
 
-/* ── Rolling cloud bank C (slow, very wide, higher opacity) ── */
+/* ── Rolling cloud bank C (slow, wide, highest opacity) ── */
 
 .fog-layer-roll-c {
   inset: 0;
   border-radius: 0;
   background: repeating-linear-gradient(
     75deg,
-    rgba(220,230,245,0.6) 0px,
-    transparent 120px,
-    rgba(220,230,245,0.48) 250px,
-    transparent 380px,
-    rgba(220,230,245,0.65) 450px,
-    transparent 600px,
-    rgba(220,230,245,0.42) 700px,
-    transparent 850px
+    rgba(255,255,255,1) 0px,
+    rgba(255,255,255,0) 50px,
+    rgba(255,255,255,0.9) 80px,
+    rgba(255,255,255,0) 140px,
+    rgba(255,255,255,1) 170px,
+    rgba(255,255,255,0) 230px,
+    rgba(255,255,255,0.9) 260px,
+    rgba(255,255,255,0) 320px,
+    rgba(255,255,255,1) 350px,
+    rgba(255,255,255,0) 410px,
+    rgba(255,255,255,0.9) 440px,
+    rgba(255,255,255,0) 500px,
+    rgba(255,255,255,1) 530px,
+    rgba(255,255,255,0) 590px,
+    rgba(255,255,255,0.9) 620px,
+    rgba(255,255,255,0) 680px,
+    rgba(255,255,255,1) 710px,
+    rgba(255,255,255,0) 770px,
+    rgba(255,255,255,0.9) 800px,
+    rgba(255,255,255,0) 860px,
+    rgba(255,255,255,1) 890px,
+    rgba(255,255,255,0) 950px,
+    rgba(255,255,255,1) 1000px
   );
   background-size: 1000px 100%;
+  mix-blend-mode: screen;
   animation: rollC 32s linear infinite;
-  mask-image: linear-gradient(to bottom, transparent 5%, black 15%, black 85%, transparent 95%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 4%, black 96%, transparent 100%);
   will-change: background-position;
 }
 
@@ -1605,62 +1650,105 @@ h1, h2, h3, h4 {
 .fog-layer-noise {
   inset: 0;
   border-radius: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.4'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.5' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.5'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 350px 350px;
   filter: none;
   opacity: 0;
   transition: opacity 1s ease;
-  mix-blend-mode: soft-light;
+  mix-blend-mode: overlay;
 }
 
 /* ─── Dark mode ── */
 
 .dark-mode .fog-layer-1 {
-  background: radial-gradient(ellipse at 30% 60%, rgba(140,160,190,0.65) 0%, rgba(120,140,165,0.4) 35%, transparent 65%);
+  background: radial-gradient(ellipse at 30% 60%, rgba(160,175,200,0.85) 0%, rgba(140,155,180,0.55) 35%, transparent 65%);
 }
 
 .dark-mode .fog-layer-roll-a {
   background: repeating-linear-gradient(
     90deg,
-    rgba(140,160,190,0.32) 0px,
-    transparent 60px,
-    rgba(140,160,190,0.28) 120px,
-    transparent 180px,
-    rgba(140,160,190,0.36) 240px,
-    transparent 320px,
-    rgba(140,160,190,0.24) 380px,
-    transparent 460px
+    rgba(160,175,200,0.65) 0px,
+    rgba(160,175,200,0) 40px,
+    rgba(160,175,200,0.6) 60px,
+    rgba(160,175,200,0) 80px,
+    rgba(160,175,200,0.65) 100px,
+    rgba(160,175,200,0) 140px,
+    rgba(160,175,200,0.6) 160px,
+    rgba(160,175,200,0) 180px,
+    rgba(160,175,200,0.65) 200px,
+    rgba(160,175,200,0) 240px,
+    rgba(160,175,200,0.6) 260px,
+    rgba(160,175,200,0) 280px,
+    rgba(160,175,200,0.65) 320px,
+    rgba(160,175,200,0) 360px,
+    rgba(160,175,200,0.6) 380px,
+    rgba(160,175,200,0) 400px,
+    rgba(160,175,200,0.65) 440px,
+    rgba(160,175,200,0) 480px,
+    rgba(160,175,200,0.65) 520px
   );
 }
 
 .dark-mode .fog-layer-roll-b {
   background: repeating-linear-gradient(
     105deg,
-    rgba(135,155,185,0.28) 0px,
-    transparent 90px,
-    rgba(135,155,185,0.22) 180px,
-    transparent 280px,
-    rgba(135,155,185,0.34) 360px,
-    transparent 500px,
-    rgba(135,155,185,0.22) 560px,
-    transparent 680px
+    rgba(150,170,195,0.6) 0px,
+    rgba(150,170,195,0) 45px,
+    rgba(150,170,195,0.6) 70px,
+    rgba(150,170,195,0) 110px,
+    rgba(150,170,195,0.55) 135px,
+    rgba(150,170,195,0) 180px,
+    rgba(150,170,195,0.6) 205px,
+    rgba(150,170,195,0) 250px,
+    rgba(150,170,195,0.6) 275px,
+    rgba(150,170,195,0) 320px,
+    rgba(150,170,195,0.55) 345px,
+    rgba(150,170,195,0) 390px,
+    rgba(150,170,195,0.6) 415px,
+    rgba(150,170,195,0) 460px,
+    rgba(150,170,195,0.6) 485px,
+    rgba(150,170,195,0) 530px,
+    rgba(150,170,195,0.55) 555px,
+    rgba(150,170,195,0) 600px,
+    rgba(150,170,195,0.6) 625px,
+    rgba(150,170,195,0) 670px,
+    rgba(150,170,195,0.6) 695px,
+    rgba(150,170,195,0) 740px,
+    rgba(150,170,195,0.6) 780px
   );
 }
 
 .dark-mode .fog-layer-roll-c {
   background: repeating-linear-gradient(
     75deg,
-    rgba(145,165,195,0.38) 0px,
-    transparent 120px,
-    rgba(145,165,195,0.3) 250px,
-    transparent 380px,
-    rgba(145,165,195,0.44) 450px,
-    transparent 600px,
-    rgba(145,165,195,0.26) 700px,
-    transparent 850px
+    rgba(165,180,205,0.75) 0px,
+    rgba(165,180,205,0) 50px,
+    rgba(165,180,205,0.65) 80px,
+    rgba(165,180,205,0) 140px,
+    rgba(165,180,205,0.75) 170px,
+    rgba(165,180,205,0) 230px,
+    rgba(165,180,205,0.65) 260px,
+    rgba(165,180,205,0) 320px,
+    rgba(165,180,205,0.75) 350px,
+    rgba(165,180,205,0) 410px,
+    rgba(165,180,205,0.65) 440px,
+    rgba(165,180,205,0) 500px,
+    rgba(165,180,205,0.75) 530px,
+    rgba(165,180,205,0) 590px,
+    rgba(165,180,205,0.65) 620px,
+    rgba(165,180,205,0) 680px,
+    rgba(165,180,205,0.75) 710px,
+    rgba(165,180,205,0) 770px,
+    rgba(165,180,205,0.65) 800px,
+    rgba(165,180,205,0) 860px,
+    rgba(165,180,205,0.75) 890px,
+    rgba(165,180,205,0) 950px,
+    rgba(165,180,205,0.75) 1000px
   );
 }
+
+.dark-mode .fog-layer-noise { opacity: 0.08; }
 
 .dark-mode .fog-layer-noise { opacity: 0.08; }
 
