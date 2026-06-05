@@ -1,3 +1,12 @@
+/* ── Safe localStorage wrapper (Chrome blocks access in third-party iframes) ── */
+
+function lsGet(key) {
+  try { return localStorage.getItem(key); } catch (e) { return null; }
+}
+function lsSet(key, val) {
+  try { localStorage.setItem(key, val); } catch (e) { /* noop */ }
+}
+
 /* ── Tab Navigation ── */
 
 document.querySelectorAll('.nav a[data-tab]').forEach(function(link) {
@@ -66,8 +75,8 @@ var modals = {
     title: '🦦 Nose Rubbing Service',
     body: '<p><strong>🧹 Rubbing the bronze otter\'s nose...</strong></p>' +
       '<div class="modal-progress"><div class="modal-progress-fill" style="width: 63%;"></div></div>' +
-      '<p>✅ Your exam scores have increased by <strong>0.04%</strong>.</p>' +
-      '<p>Rub again for additional gains. (Results may vary. ' +
+      '<p>✅ Buff stacked! Your test scores keep climbing.</p>' +
+      '<p>Rub again for additional gains. Stacked buffs persist across sessions. (Results may vary. ' +
       'The statue is not responsible for failed exams. The statue is, technically, inanimate.)</p>',
     buttons: [
       { text: '🦦 Rub Again!', class: 'modal-btn-alt', action: 'rubnose_effect' },
@@ -191,6 +200,33 @@ document.addEventListener('keydown', function(e) {
 /* ── Custom Effects System ── */
 
 var rubCount = 0;
+var rubBuffs = JSON.parse(lsGet('montereyfog-buffs') || '{"academics":0,"wisdom":0,"validation":0,"degree":0,"parkingLuck":0,"conspire":0,"fortOrd":0,"sarcasm":0,"caffeine":0,"procrastination":0}');
+
+var buffStatDefs = [
+  { key: 'academics', label: 'Academics', emoji: '📚' },
+  { key: 'wisdom', label: 'Wisdom', emoji: '🧠' },
+  { key: 'validation', label: 'Validation', emoji: '✅' },
+  { key: 'degree', label: 'Degree', emoji: '🎓' },
+  { key: 'parkingLuck', label: 'Parking Luck', emoji: '🅿️' },
+  { key: 'conspire', label: 'Conspire', emoji: '🤝' },
+  { key: 'fortOrd', label: 'Fort Ord Lore', emoji: '🏛️' },
+  { key: 'sarcasm', label: 'Sarcasm', emoji: '😏' },
+  { key: 'caffeine', label: 'Caffeine', emoji: '☕' },
+  { key: 'procrastination', label: 'Procrastination', emoji: '⏰' }
+];
+
+function updateBuffDisplay() {
+  var parts = [];
+  buffStatDefs.forEach(function(s) {
+    var val = rubBuffs[s.key] || 0;
+    if (val > 0) parts.push(s.emoji + '+' + val.toFixed(1) + '%');
+  });
+  document.getElementById('rubBuffsDisplay').textContent = parts.length ? parts.join(' ') : '✨';
+}
+
+function saveBuffs() {
+  lsSet('montereyfog-buffs', JSON.stringify(rubBuffs));
+}
 
 var effects = {
   rubnose: {
@@ -198,18 +234,80 @@ var effects = {
     colors: ['#c9a84c', '#dbbf5e', '#e8d48b', '#ffffff', '#689466'],
     flash: 'rgba(201,168,76,0.15)',
     counter: true,
-    makeToast: function() {
-      var pct = (Math.random() * 14.99 + 0.01).toFixed(2);
-      var msgs = [
-        "Your exam scores increased by {pct}%.",
-        "The bronze otter grants you {pct}% more wisdom.",
-        "You feel a warm sense of academic validation. ({pct}% increase)",
-        "Ancient otter magic swirls around you. Grades +{pct}%.",
-        "Your degree is now {pct}% more valuable. You're welcome.",
-        "Parking tickets will now miss you {pct}% of the time."
-      ];
-      var msg = msgs[Math.floor(Math.random() * msgs.length)].replace('{pct}', pct);
-      return { html: '<span class="pct">+' + pct + '%</span>' + msg };
+    makeToast: function(statKey, pct) {
+      var pctStr = pct.toFixed(2);
+      var totalForStat = (rubBuffs[statKey] || 0).toFixed(2);
+      var emoji = ({ academics:'📚', wisdom:'🧠', validation:'✅', degree:'🎓', parkingLuck:'🅿️', conspire:'🤝', fortOrd:'🏛️', sarcasm:'😏', caffeine:'☕', procrastination:'⏰' })[statKey] || '✨';
+      var msgs = {
+        academics: [
+          "Your exam scores increased by {pct}%. (Academics total: +{total}%)",
+          "Ancient otter magic swirls around you. Grades +{pct}% (Academics: +{total}%)",
+          "That 8 a.m. class is {pct}% less painful now. (Academics: +{total}%)",
+          "Your GPA just went up {pct}%. The otter is grading now. (Academics: +{total}%)",
+          "Professor said 'nice job' — {pct}% more confident. (Academics: +{total}%)",
+          "You understand the reading {pct}% more. Still haven't done it. (Academics: +{total}%)"
+        ],
+        wisdom: [
+          "The bronze otter grants you {pct}% more wisdom. (Wisdom: +{total}%)",
+          "You see through the fog {pct}% better now. (Wisdom: +{total}%)",
+          "You're {pct}% wiser. You still park in Lot B though. (Wisdom: +{total}%)",
+          "The otter whispers secrets. You retain {pct}%. (Wisdom: +{total}%)",
+          "You've gained {pct}% life experience from staring at fog. (Wisdom: +{total}%)"
+        ],
+        validation: [
+          "You feel a warm sense of academic validation. (+{pct}%, Validation: +{total}%)",
+          "The otter believes in you. That's {pct}% more support than your advisor. (Validation: +{total}%)",
+          "Your imposter syndrome decreased by {pct}%. (Validation: +{total}%)",
+          "Someone said 'you got this' and it was {pct}% effective. (Validation: +{total}%)"
+        ],
+        degree: [
+          "Your degree is now {pct}% more valuable. (Degree Value: +{total}%)",
+          "Your diploma will be {pct}% shinier. (Degree Value: +{total}%)",
+          "That degree is {pct}% more useful as a frisbee. Still counts. (Degree Value: +{total}%)",
+          "Your student loans are now {pct}% worth it. (Degree Value: +{total}%)"
+        ],
+        parkingLuck: [
+          "Parking tickets will now miss you {pct}% of the time. (Parking Luck: +{total}%)",
+          "A spot in Lot B opened up — {pct}% closer than last time. (Parking Luck: +{total}%)",
+          "Your parking permit is {pct}% less of a scam. (Parking Luck: +{total}%)",
+          "The parking fairy visited. You're {pct}% less angry. (Parking Luck: +{total}%)"
+        ],
+        conspire: [
+          "Your conspiracy theories are {pct}% more convincing. (Conspire: +{total}%)",
+          "The fog is {pct}% more likely to be a government experiment. (Conspire: +{total}%)",
+          "You're {pct}% better at connecting dots that don't exist. (Conspire: +{total}%)",
+          "The bronze otter is definitely moving when you're not looking. Belief: +{pct}%. (Conspire: +{total}%)",
+          "You're {pct}% sure the Eatery's '8 concepts' are actually one concept in a trench coat. (Conspire: +{total}%)",
+          "The fog has an agenda. You're {pct}% closer to proving it. (Conspire: +{total}%)"
+        ],
+        fortOrd: [
+          "You know {pct}% more Fort Ord trivia. Did you know it had a bowling alley? (Fort Ord Lore: +{total}%)",
+          "You can identify {pct}% more abandoned buildings by name. (Fort Ord Lore: +{total}%)",
+          "Your knowledge of army base history increased by {pct}%. The barracks miss you. (Fort Ord Lore: +{total}%)",
+          "You're {pct}% better at explaining why everything looks like it's from 1985. (Fort Ord Lore: +{total}%)"
+        ],
+        sarcasm: [
+          "Your sarcasm is {pct}% more biting. The fog is impressed. (Sarcasm: +{total}%)",
+          "You're {pct}% more likely to say 'oh great' and mean the opposite. (Sarcasm: +{total}%)",
+          "That eye roll was {pct}% more effective. (Sarcasm: +{total}%)",
+          "Your 'thanks, I hate it' delivery improved by {pct}%. (Sarcasm: +{total}%)"
+        ],
+        caffeine: [
+          "Your caffeine tolerance increased by {pct}%. The Eatery coffee is still undrinkable. (Caffeine: +{total}%)",
+          "You can now function on {pct}% less sleep. The otter is concerned. (Caffeine: +{total}%)",
+          "Your blood is now {pct}% coffee. This is fine. (Caffeine: +{total}%)",
+          "You're {pct}% more likely to risk a second cup from the Eatery. It's a gamble. (Caffeine: +{total}%)"
+        ],
+        procrastination: [
+          "Your procrastination efficiency increased by {pct}%. You'll deal with this later. (Procrastination: +{total}%)",
+          "You're {pct}% better at finding things to do instead of studying. (Procrastination: +{total}%)",
+          "You've perfected the art of doing nothing for {pct}% longer. (Procrastination: +{total}%)",
+          "That assignment is {pct}% more due tomorrow. You'll start tonight. Probably. (Procrastination: +{total}%)"
+        ]
+      };
+      var statMsgs = msgs[statKey] || ["{pct}% boost to " + statKey + ". Total: +{total}%"];
+      var msg = statMsgs[Math.floor(Math.random() * statMsgs.length)].replace('{pct}', pctStr).replace('{total}', totalForStat);
+      return { html: '<span class="pct">' + emoji + ' +' + pctStr + '%</span>' + msg };
     }
   },
   myfog: {
@@ -329,10 +427,10 @@ function getReward(count) {
 }
 
 function showReward(reward, count) {
-  var earned = JSON.parse(localStorage.getItem('montereyfog-badges') || '[]');
+  var earned = JSON.parse(lsGet('montereyfog-badges') || '[]');
   if (earned.indexOf(count) !== -1) return;
   earned.push(count);
-  localStorage.setItem('montereyfog-badges', JSON.stringify(earned));
+  lsSet('montereyfog-badges', JSON.stringify(earned));
   var container = document.getElementById('badgeContainer');
   if (!container) {
     container = document.createElement('div');
@@ -348,7 +446,7 @@ function showReward(reward, count) {
 }
 
 function restoreBadges() {
-  var earned = JSON.parse(localStorage.getItem('montereyfog-badges') || '[]');
+  var earned = JSON.parse(lsGet('montereyfog-badges') || '[]');
   if (earned.length === 0) return;
   var container = document.createElement('div');
   container.id = 'badgeContainer';
@@ -364,12 +462,23 @@ function restoreBadges() {
   });
 }
 restoreBadges();
+updateBuffDisplay();
 
 function triggerEffect(fx) {
   var isReward = false;
+  var statKey = null;
+  var perRubPct = null;
   if (fx.counter) {
     rubCount++;
     document.getElementById('rubCount').textContent = rubCount;
+
+    var keys = ['academics', 'wisdom', 'validation', 'degree', 'parkingLuck', 'conspire', 'fortOrd', 'sarcasm', 'caffeine', 'procrastination'];
+    statKey = keys[Math.floor(Math.random() * keys.length)];
+    perRubPct = parseFloat((Math.random() * 14.99 + 0.01).toFixed(2));
+    rubBuffs[statKey] = parseFloat(((rubBuffs[statKey] || 0) + perRubPct).toFixed(2));
+    saveBuffs();
+    updateBuffDisplay();
+
     var cnt = document.getElementById('otterCounter');
     cnt.classList.remove('bump');
     void cnt.offsetWidth;
@@ -388,7 +497,7 @@ function triggerEffect(fx) {
   document.body.appendChild(flash);
   setTimeout(function() { flash.remove(); }, isReward ? 500 : 400);
 
-  var toastData = fx.makeToast();
+  var toastData = fx.makeToast(statKey, perRubPct);
   var toast = document.createElement('div');
   toast.className = 'rub-toast';
   if (toastData.html) {
@@ -439,7 +548,7 @@ function triggerEffect(fx) {
 
 (function() {
   var toggle = document.getElementById('darkToggle');
-  var stored = localStorage.getItem('montereyfog-dark');
+  var stored = lsGet('montereyfog-dark');
   if (stored === 'true') {
     document.body.classList.add('dark-mode');
     toggle.textContent = '☀️';
@@ -448,7 +557,7 @@ function triggerEffect(fx) {
     document.body.classList.toggle('dark-mode');
     var isDark = document.body.classList.contains('dark-mode');
     toggle.textContent = isDark ? '☀️' : '🌙';
-    localStorage.setItem('montereyfog-dark', isDark);
+    lsSet('montereyfog-dark', isDark);
   });
 })();
 
@@ -494,13 +603,13 @@ function triggerEffect(fx) {
 
 (function() {
   var el = document.getElementById('visitorCount');
-  var count = localStorage.getItem('montereyfog-visits');
+  var count = lsGet('montereyfog-visits');
   if (!count) {
     count = 1;
   } else {
     count = parseInt(count, 10) + 1;
   }
-  localStorage.setItem('montereyfog-visits', count);
+  lsSet('montereyfog-visits', count);
   el.textContent = '🦦 Visitor #' + count;
 })();
 
@@ -739,10 +848,10 @@ function triggerEffect(fx) {
     else if (pct >= 20) rank = '🐣 Freshman — You just got here. It\'s fine.';
     else rank = '🅿️ Lot B Enthusiast — You spend too much time in the parking lot.';
 
-    var best = parseInt(localStorage.getItem(LS_KEY), 10) || 0;
+    var best = parseInt(lsGet(LS_KEY), 10) || 0;
     if (score > best) {
       best = score;
-      localStorage.setItem(LS_KEY, best);
+      lsSet(LS_KEY, best);
     }
 
     var scoreEl = document.getElementById('quizScore');
@@ -792,7 +901,7 @@ function triggerEffect(fx) {
     current = 0;
     score = 0;
     renderQuestion();
-    var best = parseInt(localStorage.getItem(LS_KEY), 10) || 0;
+    var best = parseInt(lsGet(LS_KEY), 10) || 0;
     updateLeaderboard(best);
   }
 
@@ -802,12 +911,12 @@ function triggerEffect(fx) {
       if (current === 0 && score === 0 && answered.length === 0) {
         initQuiz();
       } else {
-        updateLeaderboard(parseInt(localStorage.getItem(LS_KEY), 10) || 0);
+        updateLeaderboard(parseInt(lsGet(LS_KEY), 10) || 0);
       }
     }
   });
 
-  var best = parseInt(localStorage.getItem(LS_KEY), 10) || 0;
+  var best = parseInt(lsGet(LS_KEY), 10) || 0;
   if (best > 0) updateLeaderboard(best);
 })();
 
@@ -835,14 +944,14 @@ function triggerEffect(fx) {
     });
     if (label) label.textContent = val + '%';
     if (slider) slider.value = val;
-    localStorage.setItem(FOG_KEY, val);
+    lsSet(FOG_KEY, val);
     updateParticles();
   }
 
   function restoreFog() {
-    var val = parseInt(localStorage.getItem(FOG_KEY), 10) || 0;
+    var val = parseInt(lsGet(FOG_KEY), 10) || 0;
     if (val > 0) setFog(val);
-    var sim = localStorage.getItem(SIM_KEY) === 'true';
+    var sim = lsGet(SIM_KEY) === 'true';
     if (simCheck) simCheck.checked = sim;
     if (sim) updateParticles();
   }
@@ -866,7 +975,7 @@ function triggerEffect(fx) {
   }
 
   function updateParticles() {
-    var val = parseInt(localStorage.getItem(FOG_KEY), 10) || 0;
+    var val = parseInt(lsGet(FOG_KEY), 10) || 0;
     var sim = simCheck ? simCheck.checked : false;
     if (particleTimer) { clearInterval(particleTimer); particleTimer = null; }
     if (particlesContainer) particlesContainer.innerHTML = '';
@@ -885,14 +994,14 @@ function triggerEffect(fx) {
 
   if (simCheck) {
     simCheck.addEventListener('change', function() {
-      localStorage.setItem(SIM_KEY, this.checked);
+      lsSet(SIM_KEY, this.checked);
       updateParticles();
     });
   }
 
   if (toggle) {
     toggle.addEventListener('click', function() {
-      var val = parseInt(localStorage.getItem(FOG_KEY), 10) || 0;
+      var val = parseInt(lsGet(FOG_KEY), 10) || 0;
       if (val > 0) {
         setFog(0);
         toggle.classList.remove('active');
@@ -903,7 +1012,7 @@ function triggerEffect(fx) {
         toggle.textContent = '☀️';
       }
     });
-    var cur = parseInt(localStorage.getItem(FOG_KEY), 10) || 0;
+    var cur = parseInt(lsGet(FOG_KEY), 10) || 0;
     if (cur > 0) {
       toggle.classList.add('active');
       toggle.textContent = '☀️';
@@ -949,7 +1058,7 @@ function triggerEffect(fx) {
   var startTime = Date.now();
 
   function getRaftData() {
-    var data = localStorage.getItem(RAFT_KEY);
+    var data = lsGet(RAFT_KEY);
     if (data) {
       try { return JSON.parse(data); } catch(e) {}
     }
@@ -957,7 +1066,7 @@ function triggerEffect(fx) {
   }
 
   function saveRaftData(data) {
-    localStorage.setItem(RAFT_KEY, JSON.stringify(data));
+    lsSet(RAFT_KEY, JSON.stringify(data));
   }
 
   function formatDuration(ms) {

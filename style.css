@@ -819,6 +819,7 @@ h1, h2, h3, h4 {
   z-index: 99999;
   align-items: center;
   justify-content: center;
+  -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
 }
 
@@ -982,11 +983,21 @@ h1, h2, h3, h4 {
   z-index: 99997;
   font-family: 'DM Serif Display', serif;
   box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
   border: 1px solid rgba(201,168,76,0.3);
   transition: transform 0.3s ease;
   cursor: default;
   user-select: none;
+}
+
+.otter-counter .buff-display {
+  display: inline-block;
+  margin-left: 8px;
+  padding-left: 8px;
+  border-left: 1px solid rgba(201,168,76,0.3);
+  font-size: 11px;
+  color: #dbbf5e;
 }
 
 .otter-counter.bump { animation: counterBump 0.3s ease; }
@@ -1030,6 +1041,7 @@ h1, h2, h3, h4 {
   max-width: 420px;
   box-shadow: 0 12px 48px rgba(0,0,0,0.4);
   border: 1px solid rgba(201,168,76,0.3);
+  -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
   animation: toastIn 0.35s ease-out, toastOut 0.4s ease-in 2.6s forwards;
 }
@@ -1550,6 +1562,7 @@ h1, h2, h3, h4 {
   background-size: 520px 100%;
   mix-blend-mode: screen;
   animation: rollA 12s linear infinite;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 4%, black 96%, transparent 100%);
   mask-image: linear-gradient(to bottom, transparent 0%, black 4%, black 96%, transparent 100%);
   will-change: background-position;
 }
@@ -1593,6 +1606,7 @@ h1, h2, h3, h4 {
   background-size: 780px 100%;
   mix-blend-mode: screen;
   animation: rollB 20s linear infinite;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 4%, black 96%, transparent 100%);
   mask-image: linear-gradient(to bottom, transparent 0%, black 4%, black 96%, transparent 100%);
   will-change: background-position;
 }
@@ -1636,6 +1650,7 @@ h1, h2, h3, h4 {
   background-size: 1000px 100%;
   mix-blend-mode: screen;
   animation: rollC 32s linear infinite;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 4%, black 96%, transparent 100%);
   mask-image: linear-gradient(to bottom, transparent 0%, black 4%, black 96%, transparent 100%);
   will-change: background-position;
 }
@@ -1813,6 +1828,7 @@ h1, h2, h3, h4 {
   justify-content: center;
   transition: all 0.25s ease;
   box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
 }
 
