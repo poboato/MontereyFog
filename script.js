@@ -252,25 +252,33 @@ var effects = {
           "You see through the fog {pct}% better now. (Wisdom: +{total}%)",
           "You're {pct}% wiser. You still park in Lot B though. (Wisdom: +{total}%)",
           "The otter whispers secrets. You retain {pct}%. (Wisdom: +{total}%)",
-          "You've gained {pct}% life experience from staring at fog. (Wisdom: +{total}%)"
+          "You've gained {pct}% life experience from staring at fog. (Wisdom: +{total}%)",
+          "You're {pct}% more likely to bring an umbrella when it's sunny. Classic. (Wisdom: +{total}%)",
+          "You now understand {pct}% more of the fog's cryptic messages. (Wisdom: +{total}%)"
         ],
         validation: [
           "You feel a warm sense of academic validation. (+{pct}%, Validation: +{total}%)",
           "The otter believes in you. That's {pct}% more support than your advisor. (Validation: +{total}%)",
           "Your imposter syndrome decreased by {pct}%. (Validation: +{total}%)",
-          "Someone said 'you got this' and it was {pct}% effective. (Validation: +{total}%)"
+          "Someone said 'you got this' and it was {pct}% effective. (Validation: +{total}%)",
+          "You feel {pct}% more seen by the administration. They still won't answer your email. (Validation: +{total}%)",
+          "Your self-worth is now {pct}% less dependent on grades. (Validation: +{total}%)"
         ],
         degree: [
           "Your degree is now {pct}% more valuable. (Degree Value: +{total}%)",
           "Your diploma will be {pct}% shinier. (Degree Value: +{total}%)",
           "That degree is {pct}% more useful as a frisbee. Still counts. (Degree Value: +{total}%)",
-          "Your student loans are now {pct}% worth it. (Degree Value: +{total}%)"
+          "Your student loans are now {pct}% worth it. (Degree Value: +{total}%)",
+          "You're {pct}% more likely to frame your diploma instead of using it as a coaster. (Degree Value: +{total}%)",
+          "That degree is {pct}% more recognized outside of Monterey. Two people have heard of this school. (Degree Value: +{total}%)"
         ],
         parkingLuck: [
           "Parking tickets will now miss you {pct}% of the time. (Parking Luck: +{total}%)",
           "A spot in Lot B opened up — {pct}% closer than last time. (Parking Luck: +{total}%)",
           "Your parking permit is {pct}% less of a scam. (Parking Luck: +{total}%)",
-          "The parking fairy visited. You're {pct}% less angry. (Parking Luck: +{total}%)"
+          "The parking fairy visited. You're {pct}% less angry. (Parking Luck: +{total}%)",
+          "That meter you fed has {pct}% more time on it than you paid for. (Parking Luck: +{total}%)",
+          "You're {pct}% more likely to find a spot with your name on it. It's fate. Or desperation. (Parking Luck: +{total}%)"
         ],
         conspire: [
           "Your conspiracy theories are {pct}% more convincing. (Conspire: +{total}%)",
@@ -284,25 +292,33 @@ var effects = {
           "You know {pct}% more Fort Ord trivia. Did you know it had a bowling alley? (Fort Ord Lore: +{total}%)",
           "You can identify {pct}% more abandoned buildings by name. (Fort Ord Lore: +{total}%)",
           "Your knowledge of army base history increased by {pct}%. The barracks miss you. (Fort Ord Lore: +{total}%)",
-          "You're {pct}% better at explaining why everything looks like it's from 1985. (Fort Ord Lore: +{total}%)"
+          "You're {pct}% better at explaining why everything looks like it's from 1985. (Fort Ord Lore: +{total}%)",
+          "You can now name {pct}% more tanks that used to be parked here. (Fort Ord Lore: +{total}%)",
+          "Your Fort Ord ghost story collection grew by {pct}%. The barracks are definitely haunted. (Fort Ord Lore: +{total}%)"
         ],
         sarcasm: [
           "Your sarcasm is {pct}% more biting. The fog is impressed. (Sarcasm: +{total}%)",
           "You're {pct}% more likely to say 'oh great' and mean the opposite. (Sarcasm: +{total}%)",
           "That eye roll was {pct}% more effective. (Sarcasm: +{total}%)",
-          "Your 'thanks, I hate it' delivery improved by {pct}%. (Sarcasm: +{total}%)"
+          "Your 'thanks, I hate it' delivery improved by {pct}%. (Sarcasm: +{total}%)",
+          "You're {pct}% better at saying 'love that for you' without meaning it. (Sarcasm: +{total}%)",
+          "Your ability to weaponize 'wow' increased by {pct}%. (Sarcasm: +{total}%)"
         ],
         caffeine: [
           "Your caffeine tolerance increased by {pct}%. The Eatery coffee is still undrinkable. (Caffeine: +{total}%)",
           "You can now function on {pct}% less sleep. The otter is concerned. (Caffeine: +{total}%)",
           "Your blood is now {pct}% coffee. This is fine. (Caffeine: +{total}%)",
-          "You're {pct}% more likely to risk a second cup from the Eatery. It's a gamble. (Caffeine: +{total}%)"
+          "You're {pct}% more likely to risk a second cup from the Eatery. It's a gamble. (Caffeine: +{total}%)",
+          "Your caffeine addiction is {pct}% more socially acceptable when you call it a 'ritual'. (Caffeine: +{total}%)",
+          "That pre-8am coffee is {pct}% more necessary for survival. (Caffeine: +{total}%)"
         ],
         procrastination: [
           "Your procrastination efficiency increased by {pct}%. You'll deal with this later. (Procrastination: +{total}%)",
           "You're {pct}% better at finding things to do instead of studying. (Procrastination: +{total}%)",
           "You've perfected the art of doing nothing for {pct}% longer. (Procrastination: +{total}%)",
-          "That assignment is {pct}% more due tomorrow. You'll start tonight. Probably. (Procrastination: +{total}%)"
+          "That assignment is {pct}% more due tomorrow. You'll start tonight. Probably. (Procrastination: +{total}%)",
+          "You've scrolled for {pct}% more minutes instead of studying. Productive. (Procrastination: +{total}%)",
+          "Your 'I work better under pressure' belief intensified by {pct}%. (Procrastination: +{total}%)"
         ]
       };
       var statMsgs = msgs[statKey] || ["{pct}% boost to " + statKey + ". Total: +{total}%"];

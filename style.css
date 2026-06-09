@@ -1,5 +1,7 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
+html { overflow-x: hidden; }
+
 :root {
   --bg: #e2e7ed;
   --bg-secondary: #f0f2f5;
@@ -59,6 +61,12 @@ body {
   line-height: 1.7;
   font-size: 15px;
   transition: background 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
 }
 
 h1, h2, h3, h4 {
@@ -1184,9 +1192,11 @@ h1, h2, h3, h4 {
   .hero-seal { width: 120px; height: 120px; }
   .hero-right h1 { font-size: 1.6rem; }
   .hero-right .subtitle { font-size: 0.85rem; }
-  .header-inner { flex-wrap: wrap; gap: 8px; }
+  .header-inner { flex-wrap: wrap; gap: 4px; }
+  .header-logo { flex-shrink: 1; min-width: 0; }
   .header-seal { width: 36px; height: 36px; }
   .header-name { font-size: 0.95rem; }
+  .header-title { min-width: 0; }
   .header-tagline { display: none; }
   .header-search { order: 10; width: 100%; }
   .header-search input { width: 100%; }
@@ -1848,11 +1858,45 @@ h1, h2, h3, h4 {
   background: rgba(219,191,94,0.95);
 }
 
+/* ── Mobile fog ── */
+/* iOS Safari chokes on mix-blend-mode + position:fixed + filter:blur().
+   Simplify: normal compositing, fewer layers, smaller blur, no will-change/particles/noise. */
+
 @media (max-width: 768px) {
+  .fog-layer-1 {
+    filter: blur(15px);
+    will-change: auto;
+    mix-blend-mode: normal;
+  }
+  .fog-layer-roll-a,
+  .fog-layer-roll-b,
+  .fog-layer-noise {
+    display: none;
+  }
+  .fog-layer-roll-c {
+    mix-blend-mode: normal;
+    will-change: auto;
+    background: repeating-linear-gradient(
+      75deg,
+      rgba(255,255,255,0.6) 0px,
+      rgba(255,255,255,0.15) 80px,
+      rgba(255,255,255,0.5) 160px,
+      rgba(255,255,255,0.15) 280px,
+      rgba(255,255,255,0.6) 400px,
+      rgba(255,255,255,0.15) 520px,
+      rgba(255,255,255,0.6) 600px
+    );
+    background-size: 600px 100%;
+    mask-image: linear-gradient(to bottom, transparent 0%, black 4%, black 96%, transparent 100%);
+  }
+  .fog-particle { display: none; }
   .fog-toggle { bottom: 60px; right: 16px; width: 36px; height: 36px; font-size: 15px; }
 }
 
 @media (max-width: 480px) {
+  .fog-layer-1 {
+    filter: blur(10px);
+  }
   .fog-toggle { bottom: 50px; right: 12px; width: 32px; height: 32px; font-size: 13px; }
 }
 
