@@ -4,10 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Raft Up — Apply to CSU Monterey Fog</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦦</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://api.open-meteo.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <meta property="og:title" content="Raft Up — Apply to CSU Monterey Fog">
+  <meta property="og:description" content="Apply to CSU Monterey Fog — the foggiest, otter-est university in California. Raft up and join the 8,200+ students who call the fog home.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://californiastateuniversitymontereybay.com/apply.html">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1505228395891-9a51e7e86bf6?w=1200&h=630&fit=crop&q=80">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://images.unsplash.com/photo-1505228395891-9a51e7e86bf6?w=1200&h=630&fit=crop&q=80">
   <style>
     .apply-page { max-width: 720px; margin: 40px auto; padding: 0 20px; }
     .apply-card { background: var(--card-bg); border-radius: 12px; padding: 36px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid var(--card-border); }
@@ -58,6 +69,26 @@
         <span class="header-tagline">We're literally one mile from the beach (you just can't see it)</span>
       </div>
     </div>
+    <div class="header-actions">
+      <a href="index.html" data-effect="myfog" class="portal-btn">myFog</a>
+      <a href="index.html" data-effect="ottercam">Otter Cam</a>
+      <a href="index.html" data-effect="rubnose">Rub the Statue's Nose</a>
+      <button class="dark-toggle" id="darkToggle" aria-label="Toggle dark mode">🌙</button>
+    </div>
+  </div>
+</div>
+
+<div class="nav-wrapper">
+  <button class="nav-toggle" id="navToggle">Menu</button>
+  <div class="nav" id="mainNav">
+    <a href="index.html">Home</a>
+    <a href="academics.html">Academics</a>
+    <a href="housing.html">Housing (LOL)</a>
+    <a href="dining.html">Dining (8 concepts!)</a>
+    <a href="fog.html">Fog Report</a>
+    <a href="parking.html">Parking @ $588/yr</a>
+    <a href="quiz.html">Quiz: Real or Parody?</a>
+    <a href="apply.html">Apply</a>
   </div>
 </div>
 
@@ -137,18 +168,38 @@
       <p>Phone: (831) FOG-OTTER</p>
     </div>
     <div class="footer-col">
-      <h4>Quick Links</h4>
+      <h4>Pages</h4>
       <a href="index.html">Home</a>
-      <a href="index.html#">Otter Cam</a>
-      <a href="index.html#">Rub the Nose</a>
+      <a href="academics.html">Academics</a>
+      <a href="housing.html">Housing</a>
+      <a href="dining.html">Dining</a>
+      <a href="fog.html">Fog Report</a>
+      <a href="parking.html">Parking</a>
+      <a href="quiz.html">Quiz</a>
+      <a href="apply.html">Apply</a>
     </div>
     <div class="footer-col">
       <h4>Legal-ish</h4>
-      <a href="index.html">Back to Campus</a>
+      <a href="#" data-effect="privacypolicy">Privacy Policy (lol)</a>
+      <a href="#" data-effect="complaint">File a Complaint</a>
     </div>
   </div>
   <div class="footer-bottom">
     &copy; 2026 CSU Monterey Fog &mdash; Accredited by WASC. Barely.
+    <span class="visitor-count" id="visitorCount"></span>
+  </div>
+</div>
+
+<button class="scroll-top" id="scrollTop" aria-label="Scroll to top">↑</button>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modalContent">
+    <div class="modal-header">
+      <span id="modalTitle">CSU Monterey Fog</span>
+      <button class="modal-close" id="modalClose">&times;</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+    <div class="modal-footer" id="modalFooter"></div>
   </div>
 </div>
 
@@ -165,5 +216,6 @@ function handleSubmit(e) {
 }
 </script>
 
+<div class="otter-counter" id="otterCounter">🦦 <span id="rubCount">0</span> <span class="buff-display" id="rubBuffsDisplay">✨</span></div>
 </body>
 </html>

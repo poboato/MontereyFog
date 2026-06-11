@@ -7,40 +7,7 @@ function lsSet(key, val) {
   try { localStorage.setItem(key, val); } catch (e) { /* noop */ }
 }
 
-/* ── Tab Navigation ── */
-
-document.querySelectorAll('.nav a[data-tab]').forEach(function(link) {
-  link.addEventListener('click', function(e) {
-    e.preventDefault();
-    var tab = this.getAttribute('data-tab');
-
-    document.querySelectorAll('.nav a[data-tab]').forEach(function(l) {
-      l.classList.remove('active-tab');
-    });
-    this.classList.add('active-tab');
-
-    document.querySelectorAll('.tab-panel').forEach(function(p) {
-      p.classList.remove('active');
-    });
-    document.querySelectorAll('.tab-panel-sidebar').forEach(function(p) {
-      p.classList.remove('active');
-    });
-
-    var panel = document.getElementById('panel-' + tab);
-    var sidebar = document.getElementById('sidebar-' + tab);
-    if (panel) panel.classList.add('active');
-    if (sidebar) sidebar.classList.add('active');
-
-    document.dispatchEvent(new CustomEvent('tabchange'));
-    document.querySelector('.container').scrollIntoView({ behavior: 'smooth', block: 'start' });
-
-    var nav = document.getElementById('mainNav');
-    if (nav.classList.contains('open')) {
-      nav.classList.remove('open');
-      document.getElementById('navToggle').classList.remove('open');
-    }
-  });
-});
+/* ── Mobile Nav Toggle ── */
 
 document.getElementById('navToggle').addEventListener('click', function() {
   document.getElementById('mainNav').classList.toggle('open');
@@ -216,6 +183,8 @@ var buffStatDefs = [
 ];
 
 function updateBuffDisplay() {
+  var el = document.getElementById('rubBuffsDisplay');
+  if (!el) return;
   var parts = [];
   buffStatDefs.forEach(function(s) {
     var val = rubBuffs[s.key] || 0;
@@ -325,93 +294,6 @@ var effects = {
       var msg = statMsgs[Math.floor(Math.random() * statMsgs.length)].replace('{pct}', pctStr).replace('{total}', totalForStat);
       return { html: '<span class="pct">' + emoji + ' +' + pctStr + '%</span>' + msg };
     }
-  },
-  myfog: {
-    emojis: ['📊', '💻', '📈', '📉', '🔄', '🗄️'],
-    colors: ['#31456b', '#4a6380', '#6b92b6', '#1a2640'],
-    flash: 'rgba(49,69,107,0.12)',
-    particleClass: 'particle-grid',
-    makeToast: function() {
-      var msgs = [
-        "📊 Dashboard syncing... Established 1994. Still loading.",
-        "💻 Welcome to myFog. Your dashboard was last updated: 2019.",
-        "📈 Your stats: Days without sun: 47. Parking tickets: $588/yr. Mood: Damp.",
-        "🔄 myFog is loading. Please wait. We've been saying that since 2019."
-      ];
-      return { text: msgs[Math.floor(Math.random() * msgs.length)] };
-    }
-  },
-  ottercam: {
-    emojis: ['🔍', '📹', '👀', '🔎', '👁️', '🌫️'],
-    colors: ['#17a2b8', '#138496', '#0c7a8a', '#1a7a8a'],
-    flash: 'rgba(23,162,184,0.12)',
-    makeToast: function() {
-      var msgs = [
-        "🔍 No otters detected. Try adjusting your expectations.",
-        "📹 Camera feed: 100% fog. Otters: 0%. Disappointment: infinite.",
-        "👀 OtterCam™ has been searching since 2023. We've accepted this.",
-        "🌫️ Visibility: 2 otters. Actual otters seen: 0. The fog is winning."
-      ];
-      return { text: msgs[Math.floor(Math.random() * msgs.length)] };
-    }
-  },
-  diningmenu: {
-    emojis: ['🍜', '🌮', '🍔', '🥗', '🍝', '🥟', '🍕', '🧋'],
-    colors: ['#c9a84c', '#dbbf5e', '#e8d48b', '#b89a3a', '#689466'],
-    flash: 'rgba(201,168,76,0.12)',
-    makeToast: function() {
-      var items = ['Creamy Chicken Thing', 'Beef Situation', 'Pasta Mood', 'Soup (Color Varies)', 'Vegetable Adjacent Stir-Fry', 'Protein of Unknown Origin'];
-      var item = items[Math.floor(Math.random() * items.length)];
-      var msgs = [
-        "🥘 Today's feature: \"" + item + "\" — the Ramen Bar is still closed.",
-        "🍜 8 concepts. 1 kitchen. Infinite disappointment. Today: " + item + ".",
-        "🍔 The Eatery says " + item + ". You didn't ask. They didn't care.",
-        "🥗 Menu posted. It says " + item + ". Nobody knows what it means."
-      ];
-      return { text: msgs[Math.floor(Math.random() * msgs.length)] };
-    }
-  },
-  parkinggrief: {
-    emojis: ['🅿️', '🚗', '😌', '🧘', '🚲', '🚌'],
-    colors: ['#689466', '#4f7a4e', '#7aaa78', '#5a8d58', '#3d6b3c'],
-    flash: 'rgba(104,148,102,0.12)',
-    makeToast: function() {
-      var msgs = [
-        "🅿️ Breathe in. Breathe out. You are not your $588 parking permit.",
-        "🧘 Lot B is a journey, not a destination. (It's also a 20-minute walk.)",
-        "🚲 Free bike from the Otter Cycle Center. Or acceptance. Either works.",
-        "😌 You've reached stage 5: Acceptance. Your parking grief is valid."
-      ];
-      return { text: msgs[Math.floor(Math.random() * msgs.length)] };
-    }
-  },
-  privacypolicy: {
-    emojis: ['📄', '🔏', '📝', '⚖️', '📋', '🔐'],
-    colors: ['#8dabcf', '#b8cce0', '#9ab0cc', '#7a99bb'],
-    flash: 'rgba(141,171,207,0.1)',
-    makeToast: function() {
-      var msgs = [
-        "📄 By using this site, you consent to being gently roasted.",
-        "🔏 We collect: your location (via fog), your parking frustration, your otter search history.",
-        "⚖️ Privacy policy updated. Changes: we added more jokes. You're welcome.",
-        "📋 Your data is safe with us. (We have no idea what to do with it.)"
-      ];
-      return { text: msgs[Math.floor(Math.random() * msgs.length)] };
-    }
-  },
-  complaint: {
-    emojis: ['📮', '✅', '📨', '🗑️', '💬', '📬'],
-    colors: ['#dc3545', '#c82333', '#28a745', '#218838', '#a72834'],
-    flash: 'rgba(220,53,69,0.1)',
-    makeToast: function() {
-      var msgs = [
-        "📮 Complaint filed. It has joined the others. They are all together now.",
-        "✅ Your feedback is important to us. We've filed it where the sun doesn't shine. (Behind the Eatery.)",
-        "📨 Message received. It has been added to the void. The void is full. It's fine.",
-        "🗑️ Complaint successfully submitted. Processing time: 2-4 business years."
-      ];
-      return { text: msgs[Math.floor(Math.random() * msgs.length)] };
-    }
   }
 };
 
@@ -420,7 +302,8 @@ document.querySelectorAll('[data-effect]').forEach(function(el) {
     e.preventDefault();
     var key = this.getAttribute('data-effect');
     var fx = effects[key];
-    if (fx) triggerEffect(fx);
+    if (fx) { triggerEffect(fx); }
+    else if (modals[key]) { showModal(key); }
   });
 });
 
@@ -486,7 +369,8 @@ function triggerEffect(fx) {
   var perRubPct = null;
   if (fx.counter) {
     rubCount++;
-    document.getElementById('rubCount').textContent = rubCount;
+    var rubCountEl = document.getElementById('rubCount');
+    if (rubCountEl) rubCountEl.textContent = rubCount;
 
     var keys = ['academics', 'wisdom', 'validation', 'degree', 'parkingLuck', 'conspire', 'fortOrd', 'sarcasm', 'caffeine', 'procrastination'];
     statKey = keys[Math.floor(Math.random() * keys.length)];
@@ -496,9 +380,11 @@ function triggerEffect(fx) {
     updateBuffDisplay();
 
     var cnt = document.getElementById('otterCounter');
-    cnt.classList.remove('bump');
-    void cnt.offsetWidth;
-    cnt.classList.add('bump');
+    if (cnt) {
+      cnt.classList.remove('bump');
+      void cnt.offsetWidth;
+      cnt.classList.add('bump');
+    }
     var reward = getReward(rubCount);
     if (reward) {
       isReward = true;
@@ -584,11 +470,11 @@ function triggerEffect(fx) {
   var btn = document.getElementById('searchBtn');
   function doSearch() {
     var q = input.value.trim().toLowerCase();
-    var activePanel = document.querySelector('.tab-panel.active');
-    if (!activePanel) return;
-    var items = activePanel.querySelectorAll('.news-item, .testimonial, .fun-fact, .love-letter, .shoutout, .pro-con, .card, .disclaimer');
+    var mainContent = document.querySelector('.main-content');
+    if (!mainContent) return;
+    var items = mainContent.querySelectorAll('.news-item, .testimonial, .fun-fact, .love-letter, .shoutout, .pro-con, .card, .disclaimer');
     items.forEach(function(el) { el.classList.remove('search-hidden'); });
-    var noResults = activePanel.querySelector('.no-search-results');
+    var noResults = mainContent.querySelector('.no-search-results');
     if (noResults) noResults.remove();
     if (!q) return;
     var anyVisible = false;
@@ -605,14 +491,11 @@ function triggerEffect(fx) {
       msg.className = 'no-search-results';
       msg.style.cssText = 'text-align: center; padding: 24px; color: #888; font-style: italic;';
       msg.textContent = '🔍 No results found in the fog. Try a different search.';
-      activePanel.appendChild(msg);
+      mainContent.appendChild(msg);
     }
   }
   if (input) input.addEventListener('input', doSearch);
   if (btn) btn.addEventListener('click', function(e) { e.preventDefault(); doSearch(); });
-  document.addEventListener('tabchange', function() {
-    setTimeout(doSearch, 50);
-  });
 })();
 
 /* ── Visitor Counter ── */
@@ -736,6 +619,7 @@ function triggerEffect(fx) {
 
 (function() {
   var btn = document.getElementById('scrollTop');
+  if (!btn) return;
   window.addEventListener('scroll', function() {
     if (window.scrollY > 400) {
       btn.classList.add('show');
@@ -909,9 +793,9 @@ function triggerEffect(fx) {
     document.getElementById('quizScore').style.display = 'none';
   }
 
-  function initQuiz() {
-    var panel = document.getElementById('panel-quiz');
-    if (!panel) return;
+  // Initialize quiz on page load if quiz elements exist
+  var quizPanel = document.getElementById('quizContainer');
+  if (quizPanel) {
     shuffle(questions);
     answered = [];
     current = 0;
@@ -920,20 +804,6 @@ function triggerEffect(fx) {
     var best = parseInt(lsGet(LS_KEY), 10) || 0;
     updateLeaderboard(best);
   }
-
-  document.addEventListener('tabchange', function() {
-    var panel = document.getElementById('panel-quiz');
-    if (panel && panel.classList.contains('active')) {
-      if (current === 0 && score === 0 && answered.length === 0) {
-        initQuiz();
-      } else {
-        updateLeaderboard(parseInt(lsGet(LS_KEY), 10) || 0);
-      }
-    }
-  });
-
-  var best = parseInt(lsGet(LS_KEY), 10) || 0;
-  if (best > 0) updateLeaderboard(best);
 })();
 
 /* ── Fog Density Overlay ── */

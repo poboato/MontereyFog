@@ -3,36 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>404 — Lost in the Fog | CSU Monterey Fog</title>
-  <meta name="robots" content="noindex">
+  <title>Quiz — CSU Monterey Fog</title>
+  <meta name="description" content="Can you tell what's real about CSUMB and what's parody? Take the CSU Monterey Fog quiz to find out.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦦</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="dns-prefetch" href="https://api.open-meteo.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <meta property="og:title" content="404 — Lost in the Fog | CSU Monterey Fog">
-  <meta property="og:description" content="Page not found — you've wandered into the fog. CSU Monterey Fog parody website.">
+  <meta property="og:title" content="Quiz — CSU Monterey Fog">
+  <meta property="og:description" content="Can you tell what's real about CSUMB and what's parody? Take the CSU Monterey Fog quiz to find out.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://californiastateuniversitymontereybay.com/404.html">
+  <meta property="og:url" content="https://californiastateuniversitymontereybay.com/quiz.html">
   <meta property="og:image" content="https://images.unsplash.com/photo-1505228395891-9a51e7e86bf6?w=1200&h=630&fit=crop&q=80">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="https://images.unsplash.com/photo-1505228395891-9a51e7e86bf6?w=1200&h=630&fit=crop&q=80">
-  <style>
-    .page-404 { max-width: 600px; margin: 80px auto; padding: 0 20px; text-align: center; }
-    .page-404 h1 { font-size: 6rem; color: #c9a84c; line-height: 1; margin-bottom: 8px; }
-    .page-404 h2 { font-size: 1.6rem; color: var(--text); margin-bottom: 16px; }
-    .page-404 p { font-size: 14px; color: var(--text-secondary); margin-bottom: 24px; line-height: 1.7; }
-    .page-404 .otter { font-size: 80px; display: block; margin-bottom: 16px; }
-    .page-404 .links { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-    .page-404 .links a { background: #1a2640; color: white; text-decoration: none; padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; transition: all 0.25s ease; }
-    .page-404 .links a:hover { background: #2a3a5a; transform: translateY(-2px); }
-    .page-404 .links a.home { background: #c9a84c; color: #1a2640; }
-    .page-404 .links a.home:hover { background: #dbbf5e; }
-    @media (max-width: 600px) { .page-404 h1 { font-size: 4rem; } .page-404 { margin: 40px auto; } }
-  </style>
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-L7WR83WQC2"></script>
   <script>
@@ -64,6 +51,9 @@
       </div>
     </div>
     <div class="header-actions">
+      <a href="index.html" data-effect="myfog" class="portal-btn">myFog</a>
+      <a href="index.html" data-effect="ottercam">Otter Cam</a>
+      <a href="index.html" data-effect="rubnose">Rub the Statue's Nose</a>
       <button class="dark-toggle" id="darkToggle" aria-label="Toggle dark mode">🌙</button>
     </div>
   </div>
@@ -78,25 +68,56 @@
     <a href="dining.html">Dining (8 concepts!)</a>
     <a href="fog.html">Fog Report</a>
     <a href="parking.html">Parking @ $588/yr</a>
-    <a href="quiz.html">Quiz: Real or Parody?</a>
+    <a href="quiz.html" class="active-tab">Quiz: Real or Parody?</a>
     <a href="apply.html">Apply</a>
   </div>
 </div>
 
-<div class="page-404">
-  <span class="otter">🦦</span>
-  <h1>404</h1>
-  <h2>This page is lost in the fog</h2>
-  <p>You've wandered into an area of the website that doesn't exist — kind of like the sun during the spring semester. The page you're looking for has either moved, never existed, or is currently somewhere in Lot B waiting for a parking spot.</p>
-  <div class="links">
-    <a href="index.html" class="home">🦦 Raft Up — Go Home</a>
-    <a href="fog.html">🌫️ Fog Report</a>
-    <a href="dining.html">🍜 Dining (8 concepts!)</a>
+<div class="container">
+  <div class="main-content">
+
+    <h2>Real or Parody? — The CSUMB Quiz</h2>
+    <p>Think you know what's real about CSUMB and what we made up for the bit? Take the quiz and prove your otter knowledge.</p>
+
+    <div id="quizContainer">
+      <div id="quizProgress"></div>
+      <div id="quizCard" class="quiz-card">
+        <div id="quizQuestion" class="quiz-question"></div>
+        <div id="quizAnswers" class="quiz-answers"></div>
+        <div id="quizResult" class="quiz-result" style="display:none;"></div>
+      </div>
+      <div id="quizScore" class="quiz-score" style="display:none;"></div>
+    </div>
+
   </div>
-  <p style="margin-top: 32px; font-size: 11px; color: var(--text-muted);">Visibility: 0 pages. UV Index: N/A. Humor level: still intact.</p>
+
+  <div class="sidebar">
+
+    <div class="card">
+      <h3>Quiz Leaderboard</h3>
+      <div id="quizLeaderboard">
+        <p style="font-size:13px;color:var(--text-secondary);">Play the quiz to see your best score!</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>How It Works</h3>
+      <ul>
+        <li>You'll be shown 10 facts about CSUMB</li>
+        <li>Guess whether each one is <strong>Real</strong> or <strong>Parody</strong></li>
+        <li>Get instant feedback with the real story</li>
+        <li>Your best score is saved locally</li>
+      </ul>
+    </div>
+
+    <div class="fun-fact fun-fact--flush">
+      🦦 <strong>Pro tip:</strong> If you're unsure, guess "Real." CSUMB is weird enough that most of the good stuff is actually true.
+    </div>
+
+  </div>
 </div>
 
-<div class="footer" style="margin-top: 60px;">
+<div class="footer">
   <div class="footer-inner">
     <div class="footer-col">
       <h4>🦦 CSU Monterey Fog</h4>
