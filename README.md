@@ -1,98 +1,147 @@
-# CSU Monterey Fog — Planning Document
+# 🌫️ CSU Monterey Fog
 
-## 1. Project Overview
+> The only university where "I can't see my future" is both a metaphor *and* a weather report.
 
-| Field | Value |
-|---|---|
-| **Site** | CSU Monterey Fog |
-| **URL** | Local development (`csumb/index.html`) |
-| **Tone** | Affectionate parody — edgy jokes rooted in real CSUMB news, balanced with genuine positive spin |
-| **Audience** | Current students, alumni, prospective students who get the joke |
-| **Status** | Published |
+**Live site:** [californiastateuniversitymontereybay.com](https://californiastateuniversitymontereybay.com)
 
-## 2. Site Architecture
+An affectionate parody of California State University, Monterey Bay. News, satire, and otter-based humor from the foggiest campus in California.
+
+---
+
+## Features
+
+- **6 tabs** — Home, Academics, Housing (LOL), Dining (8 concepts!), Fog Report, Parking @ $588/yr, plus a Quiz tab
+- **Live weather** — Real NOAA data via Open-Meteo, translated into Fog-ese
+- **Dark mode** — For when the fog gets too bright (rare)
+- **Fog overlay** — Adjustable density slider with animated fog simulation
+- **Interactive quiz** — "Real or Parody?" — 10 questions about CSUMB
+- **Otter nose-rubbing** — Click to buff your stats (Academics, Wisdom, Parking Luck, etc.)
+- **MyRaft status widget** — Always down, always accurate
+- **Parody application page** — Apply to Fog Studies or Bronze Otter Nose Polishing
+- **Responsive** — Works on mobile, tablet, and desktop
+
+## Tech Stack
+
+- Vanilla HTML / CSS / JS (no frameworks)
+- [Open-Meteo API](https://open-meteo.com/) for live weather
+- [Google Fonts](https://fonts.google.com/) — DM Serif Display + Inter
+- [Unsplash](https://unsplash.com/) for hero/coastal imagery
+- Google Analytics (G-L7WR83WQC2)
+- Deployed to **GitHub Pages** with a custom domain via CNAME
+
+## Running Locally
+
+```bash
+git clone https://github.com/your-username/MontereyFog.git
+cd MontereyFog
+# Serve with any static file server, e.g.:
+npx serve .
+# Or open index.html directly in a browser
+```
+
+No build step. No dependencies. Open `index.html` and go.
+
+---
+
+## Project Structure
 
 ```
 .
-  index.html     — Main page
-  404.html       — Custom 404 page
-  apply.html     — Parody application page
-  style.css      — All styles
-  script.js      — Tab switching, nav toggle, smooth scroll
-  .nojekyll      — GitHub Pages config
-  .github/workflows/deploy.yml  — CI/CD to GitHub Pages
+├── index.html          — Main single-page app
+├── 404.html            — Custom 404 page
+├── apply.html          — Parody application page
+├── style.css           — All styles (2043 lines)
+├── script.js           — Tab switching, modals, quiz, weather, fog, effects
+├── CNAME               — Custom domain for GitHub Pages
+├── .nojekyll           — GitHub Pages config
+└── .github/workflows/deploy.yml — CI/CD to GitHub Pages
 ```
 
-- **Single-page app** with 6 tabs: Home, Academics, Housing (LOL), Dining (8 concepts!), Fog Report, Parking @ $588/yr
-- Each tab has a main content panel + matching sidebar panel (toggled via JS)
-- No framework — vanilla HTML/CSS/JS
-- Images hosted on Unsplash (hotlinked)
-- **Typography:** DM Serif Display (headings) + Inter (body) via Google Fonts
+- **Single-page app** with content panels + matching sidebar panels, toggled via JS
 - **Sticky nav** with gold underline active state
-- **Structured footer** with 3-column grid (info, quick links, legal-ish)
 - **Hero:** Full-bleed cover with gradient overlay, SVG seal/crest, gold accent, CTA button
-- **Stats ribbon:** 4-column "by the numbers" section below nav
+- **Stats ribbon:** 4-column "by the numbers" section
 - **Texture:** Subtle noise grain overlay on body for depth
 
-## 3. Design System
+## Design System
 
 ### Colors
+
 | Name | Hex | Usage |
-|---|---|---|
+|------|-----|-------|
 | Monterey Bay Blue | `#31456b` | Nav, hero text, headings, footer |
 | Ocean Blue | `#6b92b6` | Shoutout accents, gradient fills |
 | Valley Green | `#689466` | CTA buttons, fun-fact borders |
-| Sunshine Gold | `#e0b457` | Accents, borders, highlights, blink text |
+| Sunshine Gold | `#e0b457` | Accents, borders, highlights |
 | Fog Grey | `#e8edf2` | Page background, card backgrounds |
 
 ### Typography
-- **Font stack:** `'Segoe UI', Tahoma, Geneva, Verdana, sans-serif`
-- **Base size:** 14px body, 11px footer/secondary
-- **Headings:** h1: 2.6rem (1.6rem mobile), h2: 1.4rem, h3: 1.05rem
+
+- **Headings:** DM Serif Display (serif)
+- **Body:** Inter (sans-serif)
+- **Base:** 15px body, responsive down to 13px on mobile
 
 ### Components
-`.news-item`, `.testimonial`, `.fun-fact`, `.shoutout`, `.pro-con`, `.love-letter`, `.weather-widget`, `.positivity-meter`, `.card`, `.coastal-img`
 
-## 4. Content Inventory
+`.news-item`, `.testimonial`, `.fun-fact`, `.shoutout`, `.pro-con`, `.love-letter`, `.weather-widget`, `.positivity-meter`, `.card`, `.coastal-img`, `.quiz-card`, `.modal`, `.rub-toast`, `.fog-overlay`
+
+## Content
 
 ### Home Tab
-- **News items:** Otter Statue, Service Learning, Dive Program, Seaside Grads, Race-Related Stress Guide, Charlie Kirk controversy
-- **Sidebar:** Weather widget, Quick Facts, Otter Announcements, Quick Links, CTA button
+- News items: Otter Statue, Service Learning, Dive Program, Seaside Grads, Race-Related Stress Guide, Charlie Kirk controversy
+- Sidebar: Weather widget, Quick Facts, Otter Announcements, Quick Links, CTA
 
 ### Academics Tab
-- **Content:** Programs overview, Service Learning requirement
-- **News:** Dive Program, 25:1 Ratio
-- **Sidebar:** Top 10 Majors (parody), Campus Achievements, By the Numbers
+- Programs overview, Service Learning requirement, Dive Program, 25:1 Ratio
+- Sidebar: Top 10 Majors (parody), Campus Achievements, By the Numbers
 
 ### Housing Tab
-- **News:** Freshman enrollment surge, Otter Cycle Center
-- **Sidebar:** Housing Options, Housing Quick Facts
+- Freshman enrollment surge, Otter Cycle Center
+- Sidebar: Housing Options, Housing Quick Facts
 
 ### Dining Tab
-- **News (4):** 8 concepts + Ramen Bar, Meal Plan Pricing ($2,145–$2,825/semester), Dining Hours (closes at 8pm!), Weekly Specials Board ("Creamy Chicken Thing," "Beef Situation")
-- **Pro-con grids (2):** 10 total items covering Ramen Bar hours, Otter Bucks pricing, Ghost Kitchen, farmers market, birria
-- **Sidebar (5 cards):** 8 Concepts (with funny descriptions), Also Available, Meal Plan Tiers, Hours (Read and Weep), Final Meal lore
+- 8 concepts + Ramen Bar, Meal Plan Pricing ($2,145–$2,825/semester), Dining Hours (closes at 8pm!), Weekly Specials Board, Ghost Kitchen, Vendor contract satire
+- Pro-con grids, real student reviews from MapQuest, The Lutrinae, and faculty
+- Sidebar: 8 Concepts, Also Available, Meal Plan Tiers, Hours, Final Meal lore
 
 ### Fog Report Tab
-- **News:** Meteorologist consistency
-- **Sidebar:** Live Fog Conditions, Fog Survival Kit
+- Meteorologist consistency, Live Fog Conditions, Fog Survival Kit
 
 ### Parking Tab
-- **News:** Parking protest, $588 permit pricing
-- **Sidebar:** Permit Rates, Alternatives to Driving
+- Parking protest, $588 permit pricing, Permit Rates, Alternatives to Driving
 
-## 5. Remaining Tech Debt
+### Quiz Tab
+- 10 "Real or Parody?" questions with leaderboard (localStorage)
 
-- [ ] **Image hosting** — Unsplash hotlinks with no local fallback
-- [ ] **Accessibility** — missing `aria-` attributes, some images lack meaningful alt text
-- [ ] **Inline styles remain** — a few inline `style` attributes still in HTML should be moved to CSS classes
+## Interactive Features
 
-## 6. Roadmap
+- **Otter Nose Rub** — Click the "Rub the Statue's Nose" link to trigger particle effects, stat buffs (10 categories), milestone badges, and a persistent rub counter
+- **myFog Portal** — Parody dashboard modal with loading progress
+- **Otter Cam** — "Live feed, mostly fog" modal
+- **Fog Density** — Slider controls a CSS fog overlay with animated rolling cloud banks; "Fog Simulation" toggle spawns rising fog particles
+- **Dark Mode** — Persisted to localStorage
+- **Search** — Live client-side filtering of the active tab's content
+- **Visitor Counter** — Increments on each page load via localStorage
+- **Scroll to Top** — Appears after 400px of scroll
+
+## Remaining Tech Debt
+
+- [ ] Unsplash hotlinks with no local fallback
+- [ ] Missing `aria-` attributes, some images lack meaningful alt text
+- [ ] A few inline `style` attributes still in HTML should be moved to CSS classes
+- [ ] Live weather API has no caching layer
+
+## Roadmap
 
 | Phase | Items |
-|---|---|
-| **Phase 1** ✅ | Core content, tab system, brand colors, Unsplash images, mobile nav, external CSS/JS, premium typography (DM Serif Display + Inter), sticky nav, structured footer, hero with SVG seal + CTA, stats ribbon, grain texture, refined brass/gold palette, fade-in animations, card hover effects |
+|-------|-------|
+| **Phase 1** ✅ | Core content, tab system, brand colors, Unsplash images, mobile nav, external CSS/JS, premium typography, sticky nav, structured footer, hero with SVG seal + CTA, stats ribbon, grain texture, gold palette, fade-in animations, card hover effects |
 | **Phase 2** ⏳ | Favicon, meta/OG tags, accessible markup, font polish |
-| **Phase 3** | Interactive features (live weather API, visitor counter, dark mode) |
-| **Phase 4** | More content (Faculty Roasts, Fort Ord History, Real vs. Parody Quiz) |
-| **Phase 5** | Deploy (GitHub Pages / Netlify + custom domain) |
+| **Phase 3** | Interactive features (live weather API, visitor counter, dark mode) — **done** |
+| **Phase 4** | More content (Faculty Roasts, Fort Ord History, Real vs. Parody Quiz) — **done** |
+| **Phase 5** ✅ | Deploy (GitHub Pages + custom domain) |
+| **Phase 6** | Additional quiz questions, parking ticket tracker, OtterCam AI integration |
+
+---
+
+*CSU Monterey Fog is a parody website. The real CSUMB is at [csumb.edu](https://csumb.edu). We roast it because we love it.*
