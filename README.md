@@ -145,3 +145,5 @@ No build step. No dependencies. Open `index.html` and go.
 ---
 
 *CSU Monterey Fog is a parody website. The real CSUMB is at [csumb.edu](https://csumb.edu). We roast it because we love it.*
+
+![Hits](https://hits.sh/github.com/poboato/MontereyFog.svg)
