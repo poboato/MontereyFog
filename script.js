@@ -101,6 +101,78 @@ var modals = {
       'and added to our "frustration backlog," which we\'re currently ' +
       'using as kindling for the Ghost Kitchen.</p>' +
       '<p style="font-size: 11px; color: #888;">Check back never! 🦦</p>'
+  },
+  budget: {
+    title: '💰 CSUMB Budget Overview',
+    body: '<p><strong>Where Did All the Money Go? Great Question.</strong></p>' +
+      '<p><strong>2024-25 Highlights:</strong><br>' +
+      '• <strong>Deficit:</strong> $12 million (we call this a "structural enhancement opportunity")<br>' +
+      '• <strong>Staff laid off:</strong> 12 (plus 4 managers "not retained")<br>' +
+      '• <strong>Student-to-faculty ratio:</strong> Increased to 28.6:1 ("efficiency")<br>' +
+      '• <strong>New science building announced:</strong> $50 million (great timing)<br>' +
+      '• <strong>Hiring freeze:</strong> In effect, except for the person who had to announce the freeze</p>' +
+      '<p><strong>How you can help:</strong><br>' +
+      '1. Buy a parking permit ($588 — every little bit helps)<br>' +
+      '2. Rub the otter statue\'s nose (we count it as revenue)<br>' +
+      '3. Accept that the math may never math</p>' +
+      '<p style="font-size: 11px; color: #888;">We are not in a crisis. We are "right-sizing the student experience."</p>',
+    buttons: [
+      { text: '😬 That\'s Concerning', class: 'modal-btn modal-btn-close', action: 'close' }
+    ]
+  },
+  commuter: {
+    title: '🚗 Commuter Survival Guide',
+    body: '<p><strong>Welcome to the 40%.</strong></p>' +
+      '<p><strong>Your commute, by the numbers:</strong><br>' +
+      '• 3.5 hours each way (if you\'re Natalie from HCOM, and you are)<br>' +
+      '• $100+/week in gas (that\'s a parking permit every 5 weeks!)<br>' +
+      '• 47 named potholes on Highway 1<br>' +
+      '• 15 minutes circling Lot B before you accept Lot 59</p>' +
+      '<p><strong>Commuter Advisory Board update:</strong> The board exists. The commuter lounge is "being developed." The gas card request is in review. The therapy dog for the Lot 59 walk has been approved in spirit.</p>' +
+      '<p><strong>Pro tips:</strong><br>' +
+      '• MST buses are free with your student ID (the bus stop is only 10 minutes from class)<br>' +
+      '• The Otter Cycle Center rents bikes for $100/semester (vs $441 for parking — savings! And cardio!)<br>' +
+      '• If you see another commuter, nod at them. You\'re in this together.</p>' +
+      '<p style="font-size: 11px; color: #888;">Estimated time until commuter lounge opens: 2-4 business years</p>',
+    buttons: [
+      { text: '🚌 I\'ll Take the Bus', class: 'modal-btn modal-btn-close', action: 'close' }
+    ]
+  },
+  nightlife: {
+    title: '🌙 CSUMB Nightlife Guide',
+    body: '<p><strong>Welcome to the Nightlife. (It\'s quiet.)</strong></p>' +
+      '<p><strong>Available after 10pm:</strong><br>' +
+      '• The vending machine in the library ($4 Kind Bars, accepts card)<br>' +
+      '• Studying (you have exams)<br>' +
+      '• Walking across campus in the fog (free, atmospheric)<br>' +
+      '• Waiting for MyRaft to come back online<br>' +
+      '• Contemplating your choices</p>' +
+      '<p><strong>What\'s NOT available after 10pm:</strong><br>' +
+      '• The dining hall (closes at 8pm, like a retirement home)<br>' +
+      '• Parties (they get shut down immediately — "it\'s like they don\'t want you to have fun")<br>' +
+      '• The sun (it set hours ago, behind the fog)<br>' +
+      '• Social events that aren\'t painting tote bags</p>' +
+      '<p>Students describe the scene as "PG-13" and "like a middle school dance." The Monte Mash is our version of a tailgate. We\'re not proud. We\'re just tired.</p>' +
+      '<p style="font-size: 11px; color: #888;">Last party shut down: approximately 9:47pm. Every night.</p>',
+    buttons: [
+      { text: '📚 I\'ll Just Study', class: 'modal-btn modal-btn-close', action: 'close' }
+    ]
+  },
+  housingcrisis: {
+    title: '🏠 Housing Crisis HQ',
+    body: '<p><strong>You want housing? So does everyone else.</strong></p>' +
+      '<p><strong>Current status:</strong><br>' +
+      '• Waitlist peaked at <strong>300+ students</strong><br>' +
+      '• System migrated to a Ticketmaster-style queue (you get the same result — disappointment)<br>' +
+      '• Gavilan Hall: was an office building, now a dorm. Your bed is where a spreadsheet was.<br>' +
+      '• Triples are now quads. Quads are now "learning communities."<br>' +
+      '• The Dunes ($1M condos across the street): available if you have a spare million</p>' +
+      '<p><strong>What students are saying:</strong><br>' +
+      '"I\'ve tried for housing three semesters in a row. I\'ve gotten better seats at a Taylor Swift concert." — Marissa B.</p>' +
+      '<p style="font-size: 11px; color: #888;">The otter statue is also out of housing. It lives outside. Permanently.</p>',
+    buttons: [
+      { text: '😭 Add Me to the Waitlist', class: 'modal-btn modal-btn-close', action: 'close' }
+    ]
   }
 };
 
@@ -645,7 +717,16 @@ function triggerEffect(fx) {
     { fact: 'CSUMB ranks #5 in the nation for social mobility, according to U.S. News & World Report.', answer: 'real', explanation: 'CSUMB consistently ranks among the top universities in the country for lifting students into higher economic brackets.', source: 'U.S. News & World Report' },
     { fact: 'The school\'s fight song is called "Fog, Fog, Fog" and consists of a single note held for 30 seconds.', answer: 'parody', explanation: 'CSUMB doesn\'t actually have a fight song. They have fog. Lots of fog. The fog doesn\'t sing.', source: 'Made up' },
     { fact: 'The CSUMB campus was built on a decommissioned Army base — Fort Ord, closed in 1994.', answer: 'real', explanation: 'Fort Ord was a major Army training base until 1994. CSUMB was founded the same year on the same land, reusing many of the buildings.', source: 'csumb.edu / Wikipedia' },
-    { fact: 'The university offers a minor in "Fog Appreciation Studies."', answer: 'parody', explanation: 'There is no such minor. But with 180+ foggy days per year, students certainly get enough hands-on experience.', source: 'Made up' }
+    { fact: 'The university offers a minor in "Fog Appreciation Studies."', answer: 'parody', explanation: 'There is no such minor. But with 180+ foggy days per year, students certainly get enough hands-on experience.', source: 'Made up' },
+    { fact: 'The bronze otter statue on campus was vandalized with "fix housing" 11 days after being unveiled in April 2025.', answer: 'real', explanation: 'The 9-foot "Otters for Life" statue was wrapped in toilet paper and tagged with black ink referencing the campus housing crisis.', source: 'The Lutrinae / Monterey County Weekly' },
+    { fact: 'CSUMB requires all students to complete a 2-week wilderness survival course in the fog before starting classes.', answer: 'parody', explanation: 'No survival course exists, but the fog does make simply finding your classroom feel like one.', source: 'Made up' },
+    { fact: 'CSUMB had a $12 million budget deficit in 2024 and laid off 12 staff members.', answer: 'real', explanation: 'The university faced a $12M structural deficit, leading to layoffs, a hiring freeze, and raising the student-to-faculty ratio to 28.6:1.', source: 'KSBW / The Lutrinae' },
+    { fact: 'There is a secret tunnel system under campus that connects the dorms to the dining hall.', answer: 'parody', explanation: 'There are no secret tunnels — just the fog making everything feel underground.', source: 'Made up' },
+    { fact: 'CSUMB recently announced a $50 million new science building while simultaneously cutting faculty positions.', answer: 'real', explanation: 'In 2025, CSUMB announced a new science and engineering building housing marine science and NOAA, shortly after budget cuts and layoffs.', source: 'KSBW / csumb.edu' },
+    { fact: 'The dining hall\'s "Creamy Chicken Thing" was officially trademarked by the university in 2023.', answer: 'parody', explanation: 'The "Creamy Chicken Thing" is a real Eatery menu item described on the whiteboard — but it is not trademarked. Yet.', source: 'Made up (but the whiteboard item is real)' },
+    { fact: '40% of CSUMB students commute from off campus, with some driving over 3.5 hours each way.', answer: 'real', explanation: 'Nearly half of students commute, many from over 20 miles away in the tri-county area.', source: 'CSUMB enrollment data / Medium Otter News' },
+    { fact: 'CSUMB has its own app that alerts students whenever the sun comes out so they can take photos.', answer: 'parody', explanation: 'There is no sun-alert app. But given there are only about 10 sunny days per year, the demand is there.', source: 'Made up' },
+    { fact: 'A chemistry professor left UCLA specifically to teach at CSUMB because she wanted to work with undergraduates.', answer: 'real', explanation: 'Assistant Professor Roshini Ramachandran joined CSUMB from UCLA in 2023, choosing a CSU campus for its focus on undergraduate research.', source: 'csumb.edu news' }
   ];
 
   var LS_KEY = 'montereyfog-quiz-best';
