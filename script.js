@@ -658,12 +658,14 @@ function triggerEffect(fx) {
         document.querySelectorAll('.weather-widget').forEach(function(w) {
           updateWeatherWidget(w, parody);
         });
+        if (window.campusMoodRefresh) window.campusMoodRefresh();
       })
       .catch(function() {
         var fallback = { cond: '🌫️ Fog Advisory (Data Lost in the Fog)', temp: '57°F / 14°C', extra: 'Visibility: ¯\\_(ツ)_/¯<br>UV Index: Not today<br>Humidity: Yes<br>Live data got lost in the marine layer' };
         document.querySelectorAll('.weather-widget').forEach(function(w) {
           updateWeatherWidget(w, fallback);
         });
+        if (window.campusMoodRefresh) window.campusMoodRefresh();
       });
   }
 
@@ -679,9 +681,11 @@ function triggerEffect(fx) {
       fetchWeather().then(function() {
         self.textContent = '↻ ✓ Live';
         setTimeout(function() { self.textContent = '↻ Refresh'; self.disabled = false; }, 2000);
+        if (window.campusMoodRefresh) window.campusMoodRefresh();
       }).catch(function() {
         self.textContent = '↻ Refresh';
         self.disabled = false;
+        if (window.campusMoodRefresh) window.campusMoodRefresh();
       });
     });
   });
@@ -1103,4 +1107,163 @@ function triggerEffect(fx) {
 
   updateWidget(false);
   setInterval(function() { updateWidget(false); }, 15000);
+})();
+
+/* ── Campus Mood Ring ── */
+
+(function() {
+  var MOODS = [
+    { id: 'fogLost',    emoji: '🌫️', label: 'Lost in the Fog',        desc: 'You\'ve been wandering Lot B for 20 minutes. This is your life now.',              color: '#8dabcf', vibe: 'disoriented', vibePct: 25 },
+    { id: 'sunBlind',   emoji: '🌤️', label: 'Sun-Blind',              desc: 'Rare celestial event. No one knows how to act. The fog will return.',               color: '#e0b457', vibe: 'confused',     vibePct: 40 },
+    { id: 'dampened',   emoji: '🌧️', label: 'Dampened Spirits',       desc: 'The marine layer has reached your soul. Everything is slightly wet.',               color: '#5b7a9e', vibe: 'moist',        vibePct: 20 },
+    { id: 'melancholy', emoji: '☁️', label: 'Marine Layer Melancholy', desc: 'The sky is a grey blanket and so is your motivation.',                              color: '#7a8a9a', vibe: 'grey',         vibePct: 30 },
+    { id: 'dread',      emoji: '⛈️', label: 'Existential Dread',      desc: 'The weather has become sentient and it is angry. Seek shelter.',                     color: '#4a3a5a', vibe: 'apocalyptic',  vibePct: 10 },
+    { id: 'caffeinated',emoji: '☕',  label: 'Caffeinated',            desc: 'The Eatery coffee has kicked in. You are vibrating at a new frequency.',             color: '#689466', vibe: 'buzzing',      vibePct: 85 },
+    { id: 'parking',    emoji: '🅿️', label: 'Parking Lot Rage',       desc: 'The $588 permit does not include peace of mind. Lot B is full. Again.',             color: '#dc3545', vibe: 'fuming',       vibePct: 15 },
+    { id: 'nostalgic',  emoji: '🥹', label: 'Nostalgic',              desc: 'The fog reminds you of home. Or maybe that\'s the mold in Yarrow Hall.',            color: '#c9a84c', vibe: 'sentimental',  vibePct: 55 },
+    { id: 'studious',   emoji: '📚', label: 'Studious',               desc: 'The library is calling. You are ignoring it. But the guilt is productive.',          color: '#6b92b6', vibe: 'focused-adjacent', vibePct: 60 },
+    { id: 'houseless',  emoji: '🏠', label: 'Houseless',              desc: 'The housing waitlist has become a personality trait. You are 300th in line.',       color: '#e88a40', vibe: 'camping',      vibePct: 18 },
+    { id: 'lucky',      emoji: '🦦', label: 'Otter-Blessed',          desc: 'You rubbed the statue\'s nose. The universe owes you one. Collect at will.',         color: '#c9a84c', vibe: 'blessed',      vibePct: 90 },
+    { id: 'sleepy',     emoji: '😴', label: 'Sleepy',                 desc: 'Campus shuts down at 10:30pm. So do you. It\'s a lifestyle.',                       color: '#7a7a9a', vibe: 'nap-adjacent', vibePct: 22 },
+    { id: 'hangry',     emoji: '🍽️', label: 'Hangry',                 desc: 'The Eatery closed at 8pm. You are now a feral otter foraging in the fog.',           color: '#e88a40', vibe: 'feral',        vibePct: 12 }
+  ];
+
+  var lastMoodId = null;
+  var timer = null;
+
+  function getWeatherCondition() {
+    var cond = document.querySelector('.weather-widget .cond');
+    if (!cond) return 'unknown';
+    var text = cond.textContent;
+    if (text.indexOf('FOG') !== -1) return 'fog';
+    if (text.indexOf('SUN') !== -1) return 'sun';
+    if (text.indexOf('WAR ZONE') !== -1) return 'storm';
+    if (text.indexOf('Manifested') !== -1 || text.indexOf('Rain') !== -1) return 'rain';
+    if (text.indexOf('Marine Layer') !== -1 || text.indexOf('Cloud') !== -1) return 'cloud';
+    return 'unknown';
+  }
+
+  function pickMood() {
+    var weather = getWeatherCondition();
+    var hour = new Date().getHours();
+    var daySeed = Math.floor(Date.now() / (1000 * 60 * 60 * 4));
+    var rand = Math.abs((daySeed * 13 + 7) % 100) / 100;
+
+    if (weather === 'fog') return 'fogLost';
+    if (weather === 'sun') return 'sunBlind';
+    if (weather === 'rain') return 'dampened';
+    if (weather === 'cloud') return 'melancholy';
+    if (weather === 'storm') return 'dread';
+
+    if (hour < 6 || hour >= 23) return 'sleepy';
+    if (hour >= 7 && hour <= 9) {
+      return rand < 0.4 ? 'caffeinated' : 'hangry';
+    }
+    if (hour >= 12 && hour <= 13) {
+      return rand < 0.5 ? 'hangry' : 'studious';
+    }
+    if (hour >= 17 && hour <= 19) {
+      return rand < 0.3 ? 'hangry' : rand < 0.6 ? 'caffeinated' : 'studious';
+    }
+
+    var randoms = ['parking', 'nostalgic', 'studious', 'houseless', 'lucky', 'caffeinated', 'sleepy'];
+    return randoms[Math.floor(rand * randoms.length)];
+  }
+
+  function getMoodById(id) {
+    for (var i = 0; i < MOODS.length; i++) {
+      if (MOODS[i].id === id) return MOODS[i];
+    }
+    return MOODS[0];
+  }
+
+  function injectWidget() {
+    var existing = document.getElementById('moodRingCard');
+    if (existing) return existing;
+
+    var sidebars = document.querySelectorAll('.sidebar');
+    if (!sidebars.length) return null;
+
+    var card = document.createElement('div');
+    card.id = 'moodRingCard';
+    card.className = 'card mood-ring-card';
+    card.innerHTML =
+      '<div class="mood-ring-header">🎭 Campus Mood Ring</div>' +
+      '<div class="mood-ring-body">' +
+        '<div class="mood-ring-circle-wrap">' +
+          '<div class="mood-ring-circle" id="moodCircle">' +
+            '<span class="mood-ring-emoji" id="moodEmoji">🌫️</span>' +
+          '</div>' +
+          '<div class="mood-ring-ring mood-ring-pulse" id="moodRing"></div>' +
+        '</div>' +
+        '<div class="mood-ring-label" id="moodLabel">Loading...</div>' +
+        '<div class="mood-ring-desc" id="moodDesc"></div>' +
+        '<div class="mood-ring-vibe">' +
+          '<span>Vibe:</span>' +
+          '<div class="mood-ring-vibe-bar">' +
+            '<div class="mood-ring-vibe-fill" id="moodVibeFill" style="width:50%"></div>' +
+          '</div>' +
+          '<span id="moodVibeLabel">ok</span>' +
+        '</div>' +
+        '<div class="mood-ring-footer" id="moodFooter"></div>' +
+      '</div>';
+
+    var sidebar = sidebars[0];
+    sidebar.insertBefore(card, sidebar.firstChild);
+    return card;
+  }
+
+  function updateMoodRing() {
+    var card = document.getElementById('moodRingCard') || injectWidget();
+    if (!card) return;
+
+    var moodId = pickMood();
+    var mood = getMoodById(moodId);
+    if (!mood) return;
+
+    var emojiEl = document.getElementById('moodEmoji');
+    var labelEl = document.getElementById('moodLabel');
+    var descEl = document.getElementById('moodDesc');
+    var vibeFill = document.getElementById('moodVibeFill');
+    var vibeLabel = document.getElementById('moodVibeLabel');
+    var footer = document.getElementById('moodFooter');
+    var circle = document.getElementById('moodCircle');
+    var ring = document.getElementById('moodRing');
+
+    if (emojiEl) emojiEl.textContent = mood.emoji;
+    if (labelEl) labelEl.textContent = mood.label;
+    if (descEl) descEl.textContent = mood.desc;
+    if (vibeFill) {
+      vibeFill.style.width = mood.vibePct + '%';
+      vibeFill.style.background = mood.color;
+    }
+    if (vibeLabel) vibeLabel.textContent = mood.vibe;
+    if (circle) {
+      circle.style.background = mood.color + '22';
+      circle.style.boxShadow = '0 0 20px ' + mood.color + '33';
+    }
+    if (ring) ring.style.borderColor = mood.color;
+    if (footer) {
+      var now = new Date();
+      var time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      footer.textContent = '↻ Mood checked at ' + time;
+    }
+
+    if (moodId !== lastMoodId) {
+      lastMoodId = moodId;
+      var wrap = card.querySelector('.mood-ring-body');
+      if (wrap) {
+        wrap.classList.remove('mood-ring-change');
+        void wrap.offsetWidth;
+        wrap.classList.add('mood-ring-change');
+      }
+    }
+  }
+
+  window.campusMoodRefresh = updateMoodRing;
+
+  // Initial render
+  if (document.querySelector('.sidebar')) {
+    updateMoodRing();
+  }
 })();
