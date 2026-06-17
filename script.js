@@ -658,6 +658,7 @@ function triggerEffect(fx) {
         document.querySelectorAll('.weather-widget').forEach(function(w) {
           updateWeatherWidget(w, parody);
         });
+        window._campusWeather = { code: c.weather_code, temp: c.temperature_2m, humidity: c.relative_humidity_2m, wind: c.wind_speed_10m };
         if (window.campusMoodRefresh) window.campusMoodRefresh();
       })
       .catch(function() {
@@ -665,6 +666,7 @@ function triggerEffect(fx) {
         document.querySelectorAll('.weather-widget').forEach(function(w) {
           updateWeatherWidget(w, fallback);
         });
+        window._campusWeather = null;
         if (window.campusMoodRefresh) window.campusMoodRefresh();
       });
   }
@@ -1112,62 +1114,146 @@ function triggerEffect(fx) {
 /* ── Campus Mood Ring ── */
 
 (function() {
+  var RUB_TODAY_KEY = 'montereyfog-rub-today';
+
   var MOODS = [
-    { id: 'fogLost',    emoji: '🌫️', label: 'Lost in the Fog',        desc: 'You\'ve been wandering Lot B for 20 minutes. This is your life now.',              color: '#8dabcf', vibe: 'disoriented', vibePct: 25 },
-    { id: 'sunBlind',   emoji: '🌤️', label: 'Sun-Blind',              desc: 'Rare celestial event. No one knows how to act. The fog will return.',               color: '#e0b457', vibe: 'confused',     vibePct: 40 },
-    { id: 'dampened',   emoji: '🌧️', label: 'Dampened Spirits',       desc: 'The marine layer has reached your soul. Everything is slightly wet.',               color: '#5b7a9e', vibe: 'moist',        vibePct: 20 },
-    { id: 'melancholy', emoji: '☁️', label: 'Marine Layer Melancholy', desc: 'The sky is a grey blanket and so is your motivation.',                              color: '#7a8a9a', vibe: 'grey',         vibePct: 30 },
-    { id: 'dread',      emoji: '⛈️', label: 'Existential Dread',      desc: 'The weather has become sentient and it is angry. Seek shelter.',                     color: '#4a3a5a', vibe: 'apocalyptic',  vibePct: 10 },
-    { id: 'caffeinated',emoji: '☕',  label: 'Caffeinated',            desc: 'The Eatery coffee has kicked in. You are vibrating at a new frequency.',             color: '#689466', vibe: 'buzzing',      vibePct: 85 },
-    { id: 'parking',    emoji: '🅿️', label: 'Parking Lot Rage',       desc: 'The $588 permit does not include peace of mind. Lot B is full. Again.',             color: '#dc3545', vibe: 'fuming',       vibePct: 15 },
-    { id: 'nostalgic',  emoji: '🥹', label: 'Nostalgic',              desc: 'The fog reminds you of home. Or maybe that\'s the mold in Yarrow Hall.',            color: '#c9a84c', vibe: 'sentimental',  vibePct: 55 },
-    { id: 'studious',   emoji: '📚', label: 'Studious',               desc: 'The library is calling. You are ignoring it. But the guilt is productive.',          color: '#6b92b6', vibe: 'focused-adjacent', vibePct: 60 },
-    { id: 'houseless',  emoji: '🏠', label: 'Houseless',              desc: 'The housing waitlist has become a personality trait. You are 300th in line.',       color: '#e88a40', vibe: 'camping',      vibePct: 18 },
-    { id: 'lucky',      emoji: '🦦', label: 'Otter-Blessed',          desc: 'You rubbed the statue\'s nose. The universe owes you one. Collect at will.',         color: '#c9a84c', vibe: 'blessed',      vibePct: 90 },
-    { id: 'sleepy',     emoji: '😴', label: 'Sleepy',                 desc: 'Campus shuts down at 10:30pm. So do you. It\'s a lifestyle.',                       color: '#7a7a9a', vibe: 'nap-adjacent', vibePct: 22 },
-    { id: 'hangry',     emoji: '🍽️', label: 'Hangry',                 desc: 'The Eatery closed at 8pm. You are now a feral otter foraging in the fog.',           color: '#e88a40', vibe: 'feral',        vibePct: 12 }
+    // ── Weather moods ──
+    { id: 'fogLost',     emoji: '🌫️', label: 'Lost in the Fog',        desc: 'You\'ve been wandering Lot B for 20 minutes. This is your life now.',              color: '#8dabcf', vibe: 'disoriented',  vibePct: 25 },
+    { id: 'frozen',      emoji: '🥶', label: 'Brain Fog (Literally)',   desc: 'It\'s cold AND foggy. Your thoughts have condensation on them.',                    color: '#6b8aaa', vibe: 'numb',         vibePct: 18 },
+    { id: 'sunBlind',    emoji: '🌤️', label: 'Sun-Blind',              desc: 'Rare celestial event. No one knows how to act. The fog will return.',               color: '#e0b457', vibe: 'confused',     vibePct: 40 },
+    { id: 'melting',     emoji: '🥵', label: 'Melting',                 desc: 'The sun is out AND it\'s warm. This is not Monterey. Something is wrong.',          color: '#d4873a', vibe: 'overheated',   vibePct: 22 },
+    { id: 'melancholy',  emoji: '☁️', label: 'Marine Layer Melancholy', desc: 'The sky is a grey blanket and so is your motivation.',                              color: '#7a8a9a', vibe: 'grey',         vibePct: 30 },
+    { id: 'damp',        emoji: '💧', label: 'Damp',                    desc: 'Not actively raining but the air is thick enough to drink. Welcome to coastal life.', color: '#6b9fb5', vibe: 'moist',        vibePct: 28 },
+    { id: 'dampened',    emoji: '🌧️', label: 'Dampened Spirits',       desc: 'The marine layer has reached your soul. Everything is slightly wet — including your will to go to class.', color: '#5b7a9e', vibe: 'waterlogged', vibePct: 20 },
+    { id: 'dread',       emoji: '⛈️', label: 'Existential Dread',      desc: 'The weather has become sentient and it is angry. Your umbrella cannot save you.',     color: '#4a3a5a', vibe: 'apocalyptic',  vibePct: 10 },
+    { id: 'snowDay',     emoji: '❄️', label: 'Snow Day???',            desc: 'It\'s snowing in Monterey. The campus has shut down. Nobody owns a coat. Chaos.',     color: '#a0c4e8', vibe: 'unprepared',   vibePct: 45 },
+    { id: 'windBlown',   emoji: '💨', label: 'Wind-Blown',             desc: 'The marine layer has become sentient and aggressive. Hold onto your hat. And your dignity.', color: '#8a9aaa', vibe: 'battered',     vibePct: 20 },
+    // ── Time / daily life moods ──
+    { id: 'groggy',      emoji: '😩', label: 'Groggy',                 desc: 'Your 8am is in 10 minutes. You are 20 minutes away. The fog is laughing at you.',    color: '#8a7a8a', vibe: 'regretful',    vibePct: 15 },
+    { id: 'caffeinated', emoji: '☕',  label: 'Caffeinated',            desc: 'The Eatery coffee has kicked in. You are vibrating at a frequency unknown to science.', color: '#689466', vibe: 'buzzing',      vibePct: 85 },
+    { id: 'hangry',      emoji: '🍽️', label: 'Hangry',                 desc: 'The Eatery closed at 8pm. You are now a feral otter foraging for snacks in the fog.', color: '#e88a40', vibe: 'feral',        vibePct: 12 },
+    { id: 'sleepy',      emoji: '😴', label: 'Sleepy',                 desc: 'Campus shuts down at 10:30pm. So do you. It\'s a lifestyle.',                       color: '#7a7a9a', vibe: 'nap-adjacent', vibePct: 22 },
+    { id: 'weekendVibes',emoji: '🎉', label: 'Weekend Mode',           desc: 'It\'s the weekend. You could go outside. You won\'t. But you could.',                color: '#c9a84c', vibe: 'free',         vibePct: 70 },
+    // ── Campus-life moods ──
+    { id: 'parking',     emoji: '🅿️', label: 'Parking Lot Rage',      desc: 'The $588 permit does not include peace of mind. Lot B is full. Again. You\'re now on Lot 59. RIP.', color: '#dc3545', vibe: 'fuming',       vibePct: 15 },
+    { id: 'nostalgic',   emoji: '🥹', label: 'Nostalgic',              desc: 'The fog reminds you of home. Or maybe that\'s just the mold in Yarrow Hall. Either way, you have feelings.', color: '#c9a84c', vibe: 'sentimental', vibePct: 55 },
+    { id: 'studious',    emoji: '📚', label: 'Studious',               desc: 'The library is calling. You are ignoring it. But the guilt is almost as productive as studying.', color: '#6b92b6', vibe: 'focused-adjacent', vibePct: 60 },
+    { id: 'houseless',   emoji: '🏠', label: 'Houseless',              desc: 'The housing waitlist has become a personality trait. You are 300th in line and climbing.', color: '#e88a40', vibe: 'camping',      vibePct: 18 },
+    { id: 'lucky',       emoji: '🦦', label: 'Otter-Blessed',          desc: 'You rubbed the statue\'s nose. The universe owes you one. Collect at will. (Results not guaranteed.)', color: '#c9a84c', vibe: 'blessed',      vibePct: 90 },
+    { id: 'procrastinate',emoji: '⏰', label: 'Procrastinating',        desc: 'You have 3 assignments due. You\'re reading a campus mood ring. Priorities intact.',  color: '#9a8a6a', vibe: 'avoidant',     vibePct: 33 },
+    { id: 'conspiring',  emoji: '🕵️', label: 'Conspiring',             desc: 'The fog is definitely a government experiment. The Eatery\'s 8 concepts are ONE concept in a trench coat.', color: '#8a6a9a', vibe: 'suspicious',   vibePct: 28 }
   ];
 
   var lastMoodId = null;
-  var timer = null;
+  var sessionRand = Math.random();
 
-  function getWeatherCondition() {
-    var cond = document.querySelector('.weather-widget .cond');
-    if (!cond) return 'unknown';
-    var text = cond.textContent;
-    if (text.indexOf('FOG') !== -1) return 'fog';
-    if (text.indexOf('SUN') !== -1) return 'sun';
-    if (text.indexOf('WAR ZONE') !== -1) return 'storm';
-    if (text.indexOf('Manifested') !== -1 || text.indexOf('Rain') !== -1) return 'rain';
-    if (text.indexOf('Marine Layer') !== -1 || text.indexOf('Cloud') !== -1) return 'cloud';
-    return 'unknown';
+  function getWeather() {
+    var w = window._campusWeather;
+    if (w && typeof w.code === 'number') return w;
+    return null;
+  }
+
+  function classifyWeather(w) {
+    if (!w) return null;
+    var c = w.code, t = w.temp, h = w.humidity, ws = w.wind || 0;
+
+    // Fog
+    if (c === 45 || c === 48) {
+      if (t < 8) return 'frozen';
+      return 'fogLost';
+    }
+    // Clear
+    if (c === 0) {
+      if (t >= 22) return 'melting';
+      return 'sunBlind';
+    }
+    // Partly cloudy / overcast
+    if (c >= 1 && c <= 3) return 'melancholy';
+    // Drizzle
+    if (c >= 51 && c <= 57) return 'damp';
+    // Rain
+    if ((c >= 61 && c <= 67) || (c >= 80 && c <= 82)) return 'dampened';
+    // Snow
+    if (c >= 71 && c <= 77) return 'snowDay';
+    // Thunderstorm / hail
+    if (c >= 95 && c <= 99) return 'dread';
+
+    // No direct weather match — check humidity
+    if (h > 90 && t < 16) return 'damp';
+    if (h > 80 && t < 16) return 'fogLost';
+
+    // High wind
+    if (ws > 30) return 'windBlown';
+
+    return null;
+  }
+
+  function hasRubbedToday() {
+    return typeof rubCount !== 'undefined' && rubCount > 0;
   }
 
   function pickMood() {
-    var weather = getWeatherCondition();
     var hour = new Date().getHours();
-    var daySeed = Math.floor(Date.now() / (1000 * 60 * 60 * 4));
-    var rand = Math.abs((daySeed * 13 + 7) % 100) / 100;
+    var day = new Date().getDay();
+    var isWeekend = day === 0 || day === 6;
+    var rubbed = hasRubbedToday();
 
-    if (weather === 'fog') return 'fogLost';
-    if (weather === 'sun') return 'sunBlind';
-    if (weather === 'rain') return 'dampened';
-    if (weather === 'cloud') return 'melancholy';
-    if (weather === 'storm') return 'dread';
+    // Seed changes every 6 hours so mood has some consistency
+    var daySeed = Math.floor(Date.now() / (1000 * 60 * 60 * 6));
+    var rand = Math.abs(((daySeed * 13 + 7) % 1000) / 1000);
+    var combined = (rand + sessionRand * 0.3) % 1;
 
+    // 1. Weather takes priority
+    var weather = getWeather();
+    var weatherMood = classifyWeather(weather);
+    if (weatherMood) return weatherMood;
+
+    // 2. Weekend override (only if weather is neutral)
+    if (isWeekend && hour >= 9 && hour <= 21) {
+      if (combined < 0.6) return 'weekendVibes';
+    }
+
+    // 3. Time of day
     if (hour < 6 || hour >= 23) return 'sleepy';
-    if (hour >= 7 && hour <= 9) {
-      return rand < 0.4 ? 'caffeinated' : 'hangry';
-    }
-    if (hour >= 12 && hour <= 13) {
-      return rand < 0.5 ? 'hangry' : 'studious';
-    }
-    if (hour >= 17 && hour <= 19) {
-      return rand < 0.3 ? 'hangry' : rand < 0.6 ? 'caffeinated' : 'studious';
+    if (hour >= 6 && hour <= 8) return 'groggy';
+
+    if (hour >= 9 && hour <= 11) {
+      if (isWeekend && combined < 0.5) return 'weekendVibes';
+      return combined < 0.55 ? 'caffeinated' : 'studious';
     }
 
-    var randoms = ['parking', 'nostalgic', 'studious', 'houseless', 'lucky', 'caffeinated', 'sleepy'];
-    return randoms[Math.floor(rand * randoms.length)];
+    if (hour >= 12 && hour <= 13) {
+      if (combined < 0.45) return 'hangry';
+      if (combined < 0.75) return 'studious';
+      return 'nostalgic';
+    }
+
+    if (hour >= 14 && hour <= 16) {
+      if (combined < 0.25) return 'parking';
+      if (combined < 0.45) return 'procrastinate';
+      if (combined < 0.65) return 'studious';
+      if (combined < 0.85) return 'nostalgic';
+      return 'conspiring';
+    }
+
+    if (hour >= 17 && hour <= 19) {
+      if (combined < 0.35) return 'hangry';
+      if (combined < 0.55) return 'caffeinated';
+      if (combined < 0.75) return 'studious';
+      return 'nostalgic';
+    }
+
+    if (hour >= 20 && hour <= 22) {
+      if (combined < 0.4) return 'studious';
+      if (combined < 0.7) return 'sleepy';
+      if (combined < 0.85) return 'nostalgic';
+      return 'conspiring';
+    }
+
+    // 4. Fallback random pool
+    var fallbacks = ['studious', 'nostalgic', 'parking', 'houseless', 'procrastinate', 'conspiring', 'sleepy', 'caffeinated'];
+    if (rubbed && combined < 0.4) return 'lucky';
+    return fallbacks[Math.floor(combined * fallbacks.length)];
   }
 
   function getMoodById(id) {
@@ -1262,7 +1348,6 @@ function triggerEffect(fx) {
 
   window.campusMoodRefresh = updateMoodRing;
 
-  // Initial render
   if (document.querySelector('.sidebar')) {
     updateMoodRing();
   }
