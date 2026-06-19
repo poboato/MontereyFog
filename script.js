@@ -1147,6 +1147,192 @@ function triggerEffect(fx) {
   var lastMoodId = null;
   var sessionRand = Math.random();
 
+  var MOOD_DESCS = {
+    groggy: [
+      'Your 8am is in 10 minutes. You are 20 minutes away. The fog is laughing at you.',
+      'You\'ve achieved consciousness. Congratulations. The bar was on the floor.',
+      'Your brain is loading… 47%. The fog has already loaded 100%. It wins.',
+      'You checked your phone before your eyes opened. MyRaft is down. Again.',
+      'You are now awake. CSUMB regrets to inform you that it\'s not optional.',
+      'Your first thought was "can I skip?" The answer is always no.',
+      'Daylight? Never heard of her. It\'s 7am in Monterey. The sun took a personal day.',
+      'Good morning. The fog has already been working for 3 hours. You\'ve been out-hustled by weather.'
+    ],
+    caffeinated: [
+      'The Eatery coffee has kicked in. You are vibrating at a frequency unknown to science.',
+      'Second cup status: achieved. Your hands are shaking. This is fine.',
+      'You\'ve had coffee and now you have opinions. Dangerous combination.',
+      'The caffeine-to-blood ratio is finally viable. You can feel colors now.',
+      'You\'re 3 emails deep and already planning your 2pm nap. Balance.',
+      'You\'ve consumed a beverage so aggressively mediocre it gave you energy out of spite.',
+      'Campus vibes: elevated. Motor functions: barely. You\'re doing great.',
+      'The Eatery espresso machine is to productivity what MyRaft is to reliability.',
+      'You are legally awake. The rest of the world is merely present.'
+    ],
+    hangry: [
+      'The Eatery closed at 8pm. You are now a feral otter foraging for snacks in the fog.',
+      'Your blood sugar is a suggestion and your patience has expired.',
+      'You\'re 2 meals behind and the dining hall has "concept food." This is a low point.',
+      'The Ramen Bar is closed. It\'s always closed. Your stomach hasn\'t accepted this.',
+      'You\'ve eaten 3 granola bars and called it lunch. CSUMB has broken you.',
+      'You\'re not angry, you\'re hungry. Actually no, you\'re both. Full spectrum of negative emotion.',
+      'The Creamy Chicken Thing is starting to look good. You\'ve hit rock bottom.',
+      'Your last meal was 6 hours ago and the Eatery is serving "Beef Situation." You\'ll take it.',
+      'Hangry level: you just honked at a pedestrian. In the parking lot. From the passenger seat.'
+    ],
+    sleepy: [
+      'Campus shuts down at 10:30pm. So do you. It\'s a lifestyle.',
+      'It\'s past your bedtime and you\'re reading a parody website. Priorities intact.',
+      'The vending machine in the library closes at 11pm. Your only nighttime social option is gone.',
+      'Your circadian rhythm has filed a formal complaint with student services.',
+      'Sleep is for the weak. You are weak. Good night.',
+      'The fog is asleep. Why aren\'t you? Actually don\'t answer that. The fog is judging you.',
+      'Nightlife update: the Eatery is closed, the library is closing, and your bed is calling.',
+      'You\'ve reached the "staring at the ceiling questioning your choices" phase of the evening.',
+      'It\'s late. The only thing open is your third eye and the vending machine.'
+    ],
+    weekendVibes: [
+      'It\'s the weekend. You could go outside. You won\'t. But you could.',
+      'The fog took the weekend off. Why didn\'t you? Oh right, homework.',
+      'Weekend mood: aggressively doing nothing and loving it.',
+      'You have 48 hours of freedom. You\'ll spend 46 of them indoors. No regrets.',
+      'The weekend is here. The fog is still there. Some things never change.',
+      'Saturday in Seaside: the fog is thick, the possibilities are thin. Embrace it.',
+      'You made plans. You already cancelled them. This is the CSUMB way.',
+      'It\'s the weekend and the only thing on your schedule is not doing the thing on your schedule.'
+    ],
+    parking: [
+      'The $588 permit does not include peace of mind. Lot B is full. Again.',
+      'You\'ve been circling Lot 59 for 22 minutes. You\'ve memorized every license plate.',
+      'The parking situation is so bad students are considering the bus. The bus.',
+      'Your parking permit costs more than your textbooks. You still can\'t find a spot.',
+      'Lot B has 0 spots. Your will to live has 0 spots. Coincidence? The administration says yes.',
+      'You just watched someone follow a stranger to their car. That\'s not romance. That\'s Lot B.',
+      'CSUMB parking: $588 for the privilege of being 47 minutes late to class.',
+      'You\'ve expanded your parking search to the faculty lot. You\'re a rebel. You\'re also late.'
+    ],
+    nostalgic: [
+      'The fog reminds you of home. Or that\'s the mold in Yarrow Hall. You have feelings.',
+      'You just smelled something that reminded you of your childhood. It was the fog. It has no smell. You\'re losing it.',
+      'Remember when you had housing? Good times. The waitlist remembers.',
+      'You\'re feeling sentimental about that time you found parking. It was 2019. A different world.',
+      'Nostalgia hits different when your college campus used to be an Army base.',
+      'You miss the person you were before you paid $588 for a parking permit.',
+      'The fog carries memories. Mostly of other fog. But some are yours now.'
+    ],
+    procrastinate: [
+      'You have 3 assignments due. You\'re reading a campus mood ring. Priorities intact.',
+      'Your to-do list has achieved sentience and is mocking you.',
+      'You\'ll start that paper in 5 minutes. You\'ve been saying that for 3 hours.',
+      'Procrastination is not laziness. It\'s a strategic delay of inevitable disappointment.',
+      'You\'ve checked this mood ring 4 times today. Each time the answer was the same. You still checked.',
+      'Productivity tip: do it later. Later you will have more motivation. (This is a lie.)',
+      'Your assignment isn\'t due until tomorrow. Tomorrow is a future you problem.',
+      'You\'ve perfected the art of doing nothing. CSUMB should offer a degree in it.'
+    ],
+    conspiring: [
+      'The fog is definitely a government experiment. The 8 concepts are ONE concept in a trench coat.',
+      'You\'re 47% sure the bronze otter moved when you weren\'t looking. Solid theory.',
+      'The Eatery\'s "Creamy Chicken Thing" is Tuesday\'s "Beef Situation." You have photographic evidence.',
+      'MyRaft isn\'t down. It never existed. Think about it.',
+      'The administration says the fog is natural. Too natural. That\'s exactly what they\'d say.',
+      'You\'ve connected 5 dots and they form a picture of the administration having no idea what\'s going on.',
+      'The housing waitlist isn\'t a list. It\'s a social experiment. You\'re the control group.',
+      'Library food policy? Too permissive. The Eatery\'s hours? Too restrictive. The pattern is clear.'
+    ],
+    fogLost: [
+      'You\'ve been wandering Lot B for 20 minutes. This is your life now.',
+      'The fog is so thick you just walked into the same door 3 times. It wasn\'t even the right building.',
+      'Visibility: 2 otters. Both are lost. You\'re all lost together.',
+      'The marine layer has achieved consciousness. It\'s not hostile. It\'s just… there. Always.',
+      'You can\'t see the beach. You know it\'s a mile away. The fog says no.',
+      'The fog has filed for permanent residency. It was approved in 1994.',
+      'Your commute just gained 15 minutes because you drove past your exit. In the fog. Again.',
+      'CSUMB motto: "You\'ll never see it coming. Literally."'
+    ],
+    studious: [
+      'The library is calling. You are ignoring it. But the guilt is almost as productive as studying.',
+      'You\'ve been "about to start studying" for 47 minutes. The library closes in 22. Clock\'s ticking.',
+      'You opened a textbook. That counts. Put it on the resume.',
+      'Studying in the Tanimura & Antle library hits different when you could be eating inside it.',
+      'Your GPA is a number. Your parking permit cost is a number. Both are equally frightening.',
+      'You\'re in the zone. The zone is a 4-foot radius around a power outlet in the library.'
+    ],
+    houseless: [
+      'The housing waitlist has become a personality trait. You are 300th in line and climbing.',
+      'You\'ve accepted the commute. You\'ve accepted Lot 59. You\'ll never accept the $588.',
+      'Your "dorm" is a room you rent from a guy named Chad who calls himself a "property manager."',
+      'Housing update: Gavilan Hall was an office. Now it\'s a dorm. Your bed is where a copier was.',
+      'The Dunes costs $1M. You can\'t afford it. The waitlist costs your dignity. Much more affordable.'
+    ],
+    lucky: [
+      'You rubbed the statue\'s nose. The universe owes you one. Collect at will. (Results not guaranteed.)',
+      'The bronze otter has blessed you. Your parking spot will be merely bad instead of catastrophic.',
+      'The otter\'s nose is warm. That\'s either magic or someone else just rubbed it. Probably both.',
+      'You have been touched by the otter. Your next exam score will increase by at least 3% placebo.',
+      'The statue\'s nose is now slightly shinier thanks to you. The campus maintenance team is confused.'
+    ],
+    frozen: [
+      'It\'s cold AND foggy. Your thoughts have condensation on them.',
+      'The fog has turned to ice crystals. You are living inside a snow globe designed by someone depressed.',
+      'Monterey doesn\'t do "cold." This is a glitch in the simulation.',
+      'Your breath is visible. So is the fog. They\'re having a conversation about you.'
+    ],
+    sunBlind: [
+      'Rare celestial event. No one knows how to act. The fog will return shortly.',
+      'The sun is out. Students are confused. Emergency services are on standby.',
+      'Campus has entered "what is that bright thing" mode. Stay calm. It will pass.',
+      'UV index: exists. Students: not prepared. Sunscreen: a distant memory.'
+    ],
+    melting: [
+      'The sun is out AND it\'s warm. This is not Monterey. Something is wrong.',
+      'Monterey has reached 25°C. The apocalypse is upon us.',
+      'Students are shedding layers they\'ve worn since November. The campus is confused.',
+      'Heat advisory: CSUMB students will now have to interact outside. Proceed with caution.'
+    ],
+    melancholy: [
+      'The sky is a grey blanket and so is your motivation.',
+      'The marine layer is holding strong. Your enthusiasm is not.',
+      'Another cloudy day in paradise. "Paradise" being a former Army base.',
+      'The clouds have settled in. So have you. This is your life now.'
+    ],
+    damp: [
+      'Not actively raining but the air is thick enough to drink. Welcome to coastal life.',
+      'You stepped outside and instantly regretted wearing fabric.',
+      'Humidity is at 94%. Your hair has surrendered.',
+      'The air is wet. Your soul is damp. Everything is fine.',
+      '"It\'s not raining" — the lie you tell yourself while getting soaked by the atmosphere.'
+    ],
+    dampened: [
+      'The marine layer has reached your soul. Everything is slightly wet.',
+      'Rain in Monterey means 47 people will mention "we need it" before you reach class.',
+      'Your umbrella is a lie. The wind has claimed it. It belongs to the fog now.',
+      'Walking to class in Monterey rain: wet knees, fogged glasses, shattered dignity.',
+      'It\'s raining. MyRaft is down. Your umbrella broke. Today is a full house of L\'s.'
+    ],
+    dread: [
+      'The weather has become sentient and it is angry. Your umbrella cannot save you.',
+      'The sky is actively hostile. CSUMB has declared a state of "yikes."',
+      'Thunder over Monterey. Fort Ord ghosts are restless. You should also be restless.',
+      'The fog has evolved. It\'s not fog anymore. It\'s a presence.',
+      'Class is cancelled? No. CSUMB laughs at your suffering. Get to class.'
+    ],
+    snowDay: [
+      'It\'s snowing in Monterey. The campus has shut down. Nobody owns a coat. Chaos.',
+      'Snow in Seaside? The apocalypse is here and it\'s 2 inches of slush.',
+      'CSUMB does not have a snow protocol. The protocol is panic.',
+      'The otters are confused. The students are confused. The fog has retreated in shame.',
+      '"Snow day" in Monterey means "everyone crash their car on Highway 1."'
+    ],
+    windBlown: [
+      'The marine layer has become sentient and aggressive. Hold onto your hat.',
+      'The wind is so strong your parking permit just flew away. It\'s free now.',
+      'You\'re walking at a 45-degree angle. So is everyone else. This is normal here.',
+      'The fog is moving at 35 mph. So is your dignity.',
+      'Wind advisory: secure all loose items, including your will to go to class.'
+    ]
+  };
+
   function getWeather() {
     var w = window._campusWeather;
     if (w && typeof w.code === 'number') return w;
@@ -1192,10 +1378,20 @@ function triggerEffect(fx) {
     return typeof rubCount !== 'undefined' && rubCount > 0;
   }
 
+  function getPacificTime() {
+    var parts = new Intl.DateTimeFormat('en-US', { timeZone: 'America/Los_Angeles', hour: 'numeric', hour12: false, weekday: 'short' }).formatToParts(new Date());
+    var hour = 0, day = 0;
+    var dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    for (var i = 0; i < parts.length; i++) {
+      if (parts[i].type === 'hour') hour = parseInt(parts[i].value, 10);
+      if (parts[i].type === 'weekday') day = dayNames.indexOf(parts[i].value);
+    }
+    return { hour: hour, day: day, isWeekend: day === 0 || day === 6 };
+  }
+
   function pickMood() {
-    var hour = new Date().getHours();
-    var day = new Date().getDay();
-    var isWeekend = day === 0 || day === 6;
+    var pt = getPacificTime();
+    var hour = pt.hour, day = pt.day, isWeekend = pt.isWeekend;
     var rubbed = hasRubbedToday();
 
     // Seed changes every 6 hours so mood has some consistency
@@ -1263,6 +1459,15 @@ function triggerEffect(fx) {
     return MOODS[0];
   }
 
+  function pickDesc(moodId, fallback) {
+    var pool = MOOD_DESCS[moodId];
+    if (pool && pool.length) {
+      var idx = Math.floor(Math.random() * pool.length);
+      return pool[idx];
+    }
+    return fallback;
+  }
+
   function injectWidget() {
     var existing = document.getElementById('moodRingCard');
     if (existing) return existing;
@@ -1318,7 +1523,7 @@ function triggerEffect(fx) {
 
     if (emojiEl) emojiEl.textContent = mood.emoji;
     if (labelEl) labelEl.textContent = mood.label;
-    if (descEl) descEl.textContent = mood.desc;
+    if (descEl) descEl.textContent = pickDesc(moodId, mood.desc);
     if (vibeFill) {
       vibeFill.style.width = mood.vibePct + '%';
       vibeFill.style.background = mood.color;
@@ -1331,8 +1536,8 @@ function triggerEffect(fx) {
     if (ring) ring.style.borderColor = mood.color;
     if (footer) {
       var now = new Date();
-      var time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-      footer.textContent = '↻ Mood checked at ' + time;
+      var ptTime = now.toLocaleTimeString('en-US', { timeZone: 'America/Los_Angeles', hour: '2-digit', minute: '2-digit' });
+      footer.textContent = '↻ Mood checked at ' + ptTime + ' PT';
     }
 
     if (moodId !== lastMoodId) {
